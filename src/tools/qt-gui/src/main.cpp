@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QMetaType>
 #include <QQmlApplicationEngine>
+#include <QSortFilterProxyModel>
 #include <QTranslator>
 #include <QtQml>
 #include <QtTest/qtestcase.h>
@@ -23,15 +24,20 @@
 #include "datacontainer.hpp"
 #include "guibackend.hpp"
 #include "guisettings.hpp"
-#include "treeviewmodel.hpp"
+#include "treemodel.hpp"
+#include "noleavesproxymodel.hpp"
+#include "onlyleavesproxymodel.hpp"
+#include "metamodel.hpp"
 #include "undomanager.hpp"
+#include "modeltest/modeltest.h"
 
 int main (int argc, char * argv[])
 {
 	QApplication app (argc, argv);
 
-	qRegisterMetaType<TreeViewModel> ("TreeViewModel");
-	qRegisterMetaType<ConfigNode> ("ConfigNode");
+	qRegisterMetaType<TreeModel> ("TreeModel");
+	qRegisterMetaType<TreeItem> ("TreeItem");
+	qRegisterMetaType<MetaModel>("MetaModel");
 	qRegisterMetaType<UndoManager> ("UndoManager");
 	qRegisterMetaType<GUIBackend> ("GUIBackend");
 	qRegisterMetaType<GUISettings> ("GUISettings");
@@ -55,12 +61,21 @@ int main (int argc, char * argv[])
 	GUIBackend backend;
 	GUISettings settings;
 	kdb::tools::merging::MergingKDB kdb;
-	TreeViewModel treeModel (&kdb);
+	TreeModel treeModel;
+	NoLeavesProxyModel treeFilter;
+	OnlyLeavesProxyModel tableFilter;
 
-	engine.setObjectOwnership (&treeModel, QQmlApplicationEngine::CppOwnership);
+	treeFilter.setSourceModel(&treeModel);
+	tableFilter.setSourceModel(&treeModel);
+
+	engine.setObjectOwnership(&treeModel, QQmlApplicationEngine::CppOwnership);
+	engine.setObjectOwnership(&treeFilter, QQmlApplicationEngine::CppOwnership);
+	engine.setObjectOwnership(&tableFilter, QQmlApplicationEngine::CppOwnership);
 
 	ctxt->setContextProperty ("undoManager", &manager);
-	ctxt->setContextProperty ("externTreeModel", &treeModel);
+	ctxt->setContextProperty ("treeModel", &treeModel);
+	ctxt->setContextProperty("noLeavesProxyModel", &treeFilter);
+	ctxt->setContextProperty("onlyLeavesProxyModel", &tableFilter);
 	ctxt->setContextProperty ("guiBackend", &backend);
 	ctxt->setContextProperty ("guiSettings", &settings);
 
@@ -77,6 +92,10 @@ int main (int argc, char * argv[])
 		msgBox.exec ();
 		return 1;
 	}
+
+	new ModelTest(&treeModel);
+	new ModelTest(&treeFilter);
+	new ModelTest(&tableFilter);
 
 	engine.load (QUrl (QStringLiteral ("qrc:/qml/main.qml")));
 

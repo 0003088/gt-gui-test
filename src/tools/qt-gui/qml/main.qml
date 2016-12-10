@@ -1,9 +1,11 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
-import QtQuick.Window 2.0
-import QtQuick.Controls.Styles 1.1
+import QtQuick 2.6
+import QtQuick.Controls 1.5
+import QtQml.Models 2.2
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs 1.2
+import QtQuick.Window 2.0
+import Qt.labs.folderlistmodel 2.1
 import "MainFunctions.js" as MFunctions
 import "HelperFunctions.js" as Helper
 import "ErrorDialogCreator.js" as ErrorDialog
@@ -19,11 +21,11 @@ ApplicationWindow {
 	title: "Elektra Qt Editor (%1)".arg(mode)
 
 	onClosing: {
-		if (!undoManager.isClean()){
-			close.accepted = false
-			exitDialog.open()
-		}
-		else
+//		if (!undoManager.isClean()){
+//			close.accepted = false
+//			exitDialog.open()
+//		}
+//		else
 			Qt.quit()
 	}
 
@@ -56,13 +58,34 @@ ApplicationWindow {
 
 	//Set up slots to catch signals from objects
 	Connections {
-		target: treeView.treeModel
+		target: treeModel
 
 		onShowMessage: {
 			ErrorDialog.showMessage(title, text, detailedText)
 		}
 		onUpdateIndicator: {
 			treeView.updateIndicator()
+		}
+		onInvalidateFilter: {
+			treeView.updateIndicator()
+			treeViewSelection.reset()
+			keyViewSelection.reset()
+		}
+	}
+
+	Connections {
+		target: treeViewSelection
+
+		onSelectionChanged: {
+			path.selectionChanged()
+		}
+	}
+
+	Connections {
+		target: keyViewSelection
+
+		onSelectionChanged: {
+			path.selectionChanged()
 		}
 	}
 
@@ -74,27 +97,27 @@ ApplicationWindow {
 		}
 	}
 
-	Connections {
-		target: treeView.currentNode === null ? null : treeView.currentNode.parentModel
+//	Connections {
+//		target: treeView.currentNode === null ? null : treeView.currentNode.parentModel
 
-		onShowMessage: {
-			ErrorDialog.showMessage(title, text, detailedText)
-		}
-		onUpdateIndicator: {
-			treeView.updateIndicator()
-		}
-	}
+//		onShowMessage: {
+//			ErrorDialog.showMessage(title, text, detailedText)
+//		}
+//		onUpdateIndicator: {
+//			treeView.updateIndicator()
+//		}
+//	}
 
-	Connections {
-		target: treeView.currentNode === null ? null : treeView.currentNode.children
+//	Connections {
+//		target: treeView.currentNode === null ? null : treeView.currentNode.children
 
-		onShowMessage: {
-			ErrorDialog.showMessage(title, text, detailedText)
-		}
-		onUpdateIndicator: {
-			treeView.updateIndicator()
-		}
-	}
+//		onShowMessage: {
+//			ErrorDialog.showMessage(title, text, detailedText)
+//		}
+//		onUpdateIndicator: {
+//			treeView.updateIndicator()
+//		}
+//	}
 
 	//**Colors*************************************************************************************************//
 
@@ -290,7 +313,70 @@ ApplicationWindow {
 			TreeView {
 				id: treeView
 
-				treeModel: externTreeModel
+				signal updateIndicator()
+
+				anchors.fill: parent
+				anchors.margins: 1
+				headerVisible: false
+				backgroundVisible: false
+				alternatingRowColors: false
+				frameVisible: false
+
+				model: noLeavesProxyModel
+
+				selection: ItemSelectionModel {
+					id: treeViewSelection
+
+					model: noLeavesProxyModel
+
+					signal updateRoot()
+
+					onCurrentChanged: {
+						tableView.rootIndex = onlyLeavesProxyModel.mapFromSource(noLeavesProxyModel.mapToSource(currentIndex))
+						keyViewSelection.clearSelection()
+						metaView.model = null
+					}
+					onUpdateRoot: {
+						tableView.rootIndex = onlyLeavesProxyModel.mapFromSource(noLeavesProxyModel.mapToSource(currentIndex))
+					}
+				}
+
+				itemDelegate: Row {
+					Label {
+						id: label
+
+						anchors.verticalCenter: parent.verticalCenter
+						color: noLeavesProxyModel !== null ? (noLeavesProxyModel.data(styleData.index, 265) ? disabledPalette.windowText : activePalette.text) : ""
+						text: styleData.value
+					}
+					Item {
+						id: spacer
+						width: defaultSpacing
+						height: label.height
+					}
+					Indicator {
+						id: indicator
+
+						signal updateIndicator()
+
+						Component.onCompleted: treeView.updateIndicator.connect(updateIndicator)
+
+						paintcolor: label.color
+						width: label.font.pixelSize*0.85
+						height: width
+						anchors.verticalCenter: label.verticalCenter
+						opacity: (noLeavesProxyModel !== null ? (treeModel.data(noLeavesProxyModel.mapToSource(styleData.index), 262) > 0 && treeModel.data(noLeavesProxyModel.mapToSource(styleData.index), 263) ? 1 : 0) : 0)
+						onUpdateIndicator: {
+							paintcolor = label.color
+							opacity = (noLeavesProxyModel !== null ? (treeModel.data(noLeavesProxyModel.mapToSource(styleData.index), 262) > 0 && treeModel.data(noLeavesProxyModel.mapToSource(styleData.index), 263) ? 1 : 0) : 0)
+
+						}
+					}
+				}
+
+				TableViewColumn {
+					role: "baseName"
+				}
 			}
 			HelpArea {
 				helpText: qsTr("This is a tree view of the Key Database. It shows\nthe entire tree of the Key Database and allows\nyou to traverse the keys.")
@@ -307,44 +393,26 @@ ApplicationWindow {
 				width: keyAreaWidth
 				height: keyAreaHeight
 
-				TableView {
-					id: keyAreaView
-
-					property int	keyAreaCopyIndex:-1
-					property string currentNodePath:""
-
-					signal updateModel()
+				TreeView {
+					id: tableView
 
 					anchors.fill: parent
 					anchors.margins: 1
 					frameVisible: false
 					alternatingRowColors: false
 					backgroundVisible: false
+					onCurrentIndexChanged: metaView.model = treeModel.data(onlyLeavesProxyModel.mapToSource(currentIndex), 266)
+					model: onlyLeavesProxyModel
 
-//					Component.onCompleted: treeView.updateIndicator.connect(updateModel)
-
-//					onUpdateModel: model = getModel()
-
-					model: getModel()
-
-					function getModel() {
-						if (treeView.currentNode === null)
-							return null
-						else if (treeView.currentNode.childrenHaveNoChildren)
-							return treeView.currentNode.children
-					}
-
-					onCurrentRowChanged: {
-						if (currentRow === -1)
-							keyAreaSelectedItem = null
-						else
-							model !== null ? keyAreaSelectedItem = model.get(currentRow) : keyAreaSelectedItem = null
+					selection: ItemSelectionModel {
+						id: keyViewSelection
+						model: onlyLeavesProxyModel
 					}
 
 					TableViewColumn {
 						id: nameColumn
 
-						role: "name"
+						role: "baseName"
 						title: qsTr("Key Name")
 						width: Math.ceil(keyArea.width*0.5 - defaultSpacing*0.5)
 					}
@@ -354,51 +422,6 @@ ApplicationWindow {
 						role: "value"
 						title: qsTr("Key Value")
 						width: Math.ceil(keyArea.width*0.5 - defaultSpacing*0.5)
-					}
-					itemDelegate: Item {
-						Text{
-							anchors.fill: parent
-							anchors.leftMargin: defaultMargins
-							anchors.verticalCenter: parent.verticalCenter
-							text: (treeView.currentNode === null || styleData.value === undefined) ? "" : styleData.value.replace(/\n/g, " ")
-							color: treeView.currentNode === null ? "transparent" : ((keyAreaView.keyAreaCopyIndex === styleData.row &&
-																					 treeView.currentNode.path === keyAreaView.currentNodePath &&
-																					 keyAreaSelectedItem !== null) ? disabledPalette.text : (guiSettings !== null ? guiSettings.nodeWithKeyColor : activePalette.text))
-						}
-					}
-
-					rowDelegate: Component {
-						Rectangle {
-							width: keyAreaView.width
-							color: styleData.selected ? guiSettings.highlightColor : "transparent"
-
-							MouseArea {
-								anchors.fill: parent
-								acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-								onClicked: {
-									if (mouse.button === Qt.RightButton){
-										keyAreaContextMenu.popup()
-									}
-									else if (mouse.button === Qt.LeftButton){
-										keyAreaView.currentRow = styleData.row
-										MFunctions.updateKeyAreaSelection()
-									}
-								}
-
-								onDoubleClicked: {
-									keyAreaView.currentRow = styleData.row
-									MFunctions.updateKeyAreaSelection()
-									guiActions.editAction.trigger()
-								}
-							}
-						}
-					}
-					Keys.onPressed: {
-						if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && keyAreaSelectedItem !== null){
-							MFunctions.updateKeyAreaSelection()
-							guiActions.editAction.trigger()
-						}
 					}
 				}
 				HelpArea {
@@ -412,7 +435,7 @@ ApplicationWindow {
 				height: metaAreaHeight
 
 				TableView {
-					id: metaAreaView
+					id: metaView
 
 					anchors.fill: parent
 					anchors.margins: 1
@@ -421,30 +444,19 @@ ApplicationWindow {
 					backgroundVisible: false
 					selectionMode: SelectionMode.NoSelection
 
-					model: keyAreaSelectedItem === null ? null : keyAreaSelectedItem.metaValue
-
 					TableViewColumn {
 						id: metaNameColumn
 
-						role: "name"
+						role: "metaName"
 						title: qsTr("Metakey Name")
 						width: Math.ceil(metaArea.width*0.5 - defaultSpacing*0.5)
 					}
 					TableViewColumn {
 						id: metaValueColumn
 
-						role: "value"
+						role: "metaValue"
 						title: qsTr("Metakey Value")
 						width: Math.ceil(metaArea.width*0.5 - defaultSpacing*0.5)
-					}
-
-					itemDelegate: Item {
-						Text {
-							anchors.fill: parent
-							anchors.leftMargin: defaultMargins
-							text: styleData.value
-							color: guiSettings.nodeWithKeyColor
-						}
 					}
 				}
 				HelpArea {
@@ -499,72 +511,80 @@ ApplicationWindow {
 					anchors.margins: defaultMargins
 					anchors.rightMargin: searchResultsCloseButton.width
 
-					ListView {
-						id: searchResultsListView
+					TreeView {
+						id: searchResultsView
 
 						anchors.fill: parent
 						clip: true
-						highlightMoveDuration: 0
-						highlightResizeDuration: 0
-						keyNavigationWraps: true
+						//						highlightMoveDuration: 0
+						//						highlightResizeDuration: 0
+						//						keyNavigationWraps: true
 						model: null
 
-						Keys.onPressed: {
-							if (event.key === Qt.Key_Up && searchResultsListView.currentIndex > 0){
-								currentIndex--
-								searchResultsSelectedItem = model.get(currentIndex)
-							}
-							else if (event.key === Qt.Key_Down && searchResultsListView.currentIndex < model.rowCount() - 1){
-								currentIndex++
-								searchResultsSelectedItem = model.get(currentIndex)
-							}
-							else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && searchResultsSelectedItem !== null){
-								editKeyWindow.selectedNode = searchResultsSelectedItem
-								editKeyWindow.accessFromSearchResults = true
-								guiActions.editAction.trigger()
-							}
+						selection: ItemSelectionModel {
+
 						}
 
-						highlight: Rectangle {
-							id: highlightBar
-							color: guiSettings.highlightColor
+						TableViewColumn {
+							id: searchResultsColumn
 						}
 
-						delegate: Text {
-							color: guiSettings.nodeWithKeyColor
-							text: path
+						//						Keys.onPressed: {
+						//							if(event.key === Qt.Key_Up && searchResultsListView.currentIndex > 0){
+						//								currentIndex--
+						//								searchResultsSelectedItem = model.get(currentIndex)
+						//							}
+						//							else if(event.key === Qt.Key_Down && searchResultsListView.currentIndex < model.rowCount() - 1){
+						//								currentIndex++
+						//								searchResultsSelectedItem = model.get(currentIndex)
+						//							}
+						//							else if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && searchResultsSelectedItem !== null){
+						//								editKeyWindow.selectedNode = searchResultsSelectedItem
+						//								editKeyWindow.accessFromSearchResults = true
+						//								editAction.trigger()
+						//							}
+						//						}
 
-							MouseArea {
-								anchors.fill: parent
-								acceptedButtons: Qt.LeftButton | Qt.RightButton
+						//						highlight: Rectangle {
+						//							id: highlightBar
+						//							color: guiSettings.highlightColor
+						//						}
 
-								onClicked: {
-									if (searchResultsListView.model.get(0).name !== "NotfoundNode"){
-										if (mouse.button === Qt.LeftButton){
-											searchResultsListView.currentIndex = index
-											searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
-											forceActiveFocus()
-										}
-										else if (mouse.button === Qt.RightButton) {
-											searchResultsListView.currentIndex = index
-											searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
-											forceActiveFocus()
-											editKeyWindow.accessFromSearchResults = true
-											searchResultsContextMenu.popup()
-										}
-									}
-								}
-								onDoubleClicked: {
-									if (searchResultsListView.model.get(0).name !== "NotfoundNode"){
-										searchResultsListView.currentIndex = index
-										forceActiveFocus()
-										editKeyWindow.accessFromSearchResults = true
-										editKeyWindow.selectedNode = searchResultsListView.model.get(searchResultsListView.currentIndex)
-								guiActions.editAction.trigger()
-									}
-								}
-							}
-						}
+						//						delegate: Text {
+						//							color: guiSettings.nodeWithKeyColor
+						//							text: path
+
+						//							MouseArea {
+						//								anchors.fill: parent
+						//								acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+						//								onClicked: {
+						//									if(searchResultsListView.model.get(0).name !== "NotfoundNode"){
+						//										if(mouse.button === Qt.LeftButton){
+						//											searchResultsListView.currentIndex = index
+						//											searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
+						//											forceActiveFocus()
+						//										}
+						//										else if(mouse.button === Qt.RightButton) {
+						//											searchResultsListView.currentIndex = index
+						//											searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
+						//											forceActiveFocus()
+						//											editKeyWindow.accessFromSearchResults = true
+						//											searchResultsContextMenu.popup()
+						//										}
+						//									}
+						//								}
+						//								onDoubleClicked: {
+						//									if(searchResultsListView.model.get(0).name !== "NotfoundNode"){
+						//										searchResultsListView.currentIndex = index
+						//										forceActiveFocus()
+						//										editKeyWindow.accessFromSearchResults = true
+						//										editKeyWindow.selectedNode = searchResultsListView.model.get(searchResultsListView.currentIndex)
+						//										editAction.trigger()
+						//									}
+						//								}
+						//							}
+						//						}
 					}
 				}
 			}
