@@ -8,29 +8,54 @@
 
 #include "deletekeycommand.hpp"
 
-DeleteKeyCommand::DeleteKeyCommand (const QString & type, TreeViewModel * model, int index, QUndoCommand * parent)
-: QUndoCommand (parent), m_model (model), m_node (model->model ().at (index)), m_index (index), m_isRoot (false)
+DeleteKeyCommand::DeleteKeyCommand (TreeModel* model, const QModelIndex &index, QUndoCommand* parent)
+: QUndoCommand(parent)
+, m_model(model)
+, m_item(qvariant_cast<TreeItemPtr>(model->data(index, TreeModel::ItemRole)))
+, m_index(m_model->pathFromIndex(index.parent()))
+, m_isRoot(false)
+, m_row(index.row())
 {
-	setText (type);
+	setText("Delete Key");
 
-	if (!m_node->getPath ().contains ('/'))
+	Q_ASSERT(m_model == index.model());
+
+	if(!m_item->name().contains('/'))
 	{
 		m_isRoot = true;
-		m_root = ConfigNodePtr (new ConfigNode (m_node->getPath (), m_node->getPath (), nullptr, m_model));
+		m_root = TreeItemPtr(new TreeItem(m_item->baseName(), m_item->name(), 0, qvariant_cast<TreeItemPtr>(model->data(index, TreeModel::RootRole))));
 	}
 }
 
 void DeleteKeyCommand::undo ()
 {
-	if (m_isRoot) m_model->removeRow (m_index);
-	m_model->insertRow (m_index, m_node);
-	m_model->refreshArrayNumbers ();
-	m_model->refresh ();
+	QModelIndex index = m_model->pathToIndex(m_index);
+
+	if (index.isValid())
+	{
+//		if(m_isRoot)
+//			m_model->removeRow(index.row(), index);
+
+		QList<TreeItemPtr> items;
+		Q_ASSERT(m_item);
+		items.append(m_item);
+		m_model->setItemsToInsert(items);
+
+		m_model->insertRows(m_row, items.count(), index);
+		//	m_model->refreshArrayNumbers();
+		//	m_model->refresh();
+	}
 }
 
 void DeleteKeyCommand::redo ()
 {
-	m_model->removeRow (m_index);
-	if (m_isRoot) m_model->insertRow (m_index, m_root, false);
-	m_model->refreshArrayNumbers ();
+	QModelIndex index = m_model->pathToIndex(m_index);
+
+	if (index.isValid())
+	{
+		m_model->removeRow(m_row, index);
+//		if(m_isRoot)
+//			m_model->insertRow(index.row(), index.parent(), m_root, false);
+		//	m_model->refreshArrayNumbers();
+	}
 }

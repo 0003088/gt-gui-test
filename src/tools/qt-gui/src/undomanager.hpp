@@ -10,7 +10,7 @@
 #define UNDOMANAGER_HPP
 
 #include "datacontainer.hpp"
-#include "treeviewmodel.hpp"
+#include "treemodel.hpp"
 #include <QApplication>
 #include <QClipboard>
 #include <QObject>
@@ -94,7 +94,7 @@ public:
 	 * @param model The TreeViewModel to put in the clipboard.
 	 * @param idx The index of the ConfigNode.
 	 */
-	Q_INVOKABLE void putToClipboard (const QString & type, TreeViewModel * model, int idx);
+	Q_INVOKABLE void putToClipboard (const QString & type, const QModelIndex &index);
 
 	/**
 	 * @brief Create a new EditKeyCommand.
@@ -103,7 +103,7 @@ public:
 	 * @param idx The index of the edited ConfigNode.
 	 * @param data This container holds the data needed to undo and redo the edit.
 	 */
-	Q_INVOKABLE void createEditKeyCommand (TreeViewModel * model, int idx, DataContainer * data);
+	Q_INVOKABLE void createEditKeyCommand (TreeModel * model, const QModelIndex &index, DataContainer *data);
 
 	/**
 	 * @brief Create a new DeleteKeyCommand.
@@ -112,7 +112,7 @@ public:
 	 * @param model The TreeViewModel of the deleted ConfigNode.
 	 * @param idx The index of the deleted ConfigNode.
 	 */
-	Q_INVOKABLE void createDeleteKeyCommand (const QString & type, TreeViewModel * model, int idx);
+	Q_INVOKABLE void createDeleteKeyCommand (TreeModel* model, const QModelIndex &index);
 
 	/**
 	 * @brief Create a new NewKeyCommand.
@@ -122,21 +122,21 @@ public:
 	 * @param data This container holds the data needed to undo and redo the edit.
 	 * @param isBelow Determines if the new key is a treebranch that requires the treeview to update.
 	 */
-	Q_INVOKABLE void createNewKeyCommand (TreeViewModel * model, int idx, DataContainer * data, bool isBelow);
+	Q_INVOKABLE void createNewKeyCommand (const QModelIndex &index, DataContainer* data, bool isBelow);
 
 	/**
 	 * @brief Copy a ConfigNode into a different TreeViewModel.
 	 * @param model The target TreeViewModel of the copied ConfigNode.
 	 * @param idx The index of the copied ConfigNode.
 	 */
-	Q_INVOKABLE void createCopyKeyCommand (TreeViewModel * model, int idx);
+	Q_INVOKABLE void createCopyKeyCommand (const QModelIndex &index);
 
 	/**
 	 * @brief Copy a ConfigNode into a different TreeViewModel and delete the source ConfigNode.
 	 * @param model The target TreeViewModel of the cut ConfigNode.
 	 * @param idx The index of the cut ConfigNode.
 	 */
-	Q_INVOKABLE void createCutKeyCommand (TreeViewModel * model, int idx);
+	Q_INVOKABLE void createCutKeyCommand (const QModelIndex &index);
 
 	/**
 	 * @brief Import a configuration from file.
@@ -144,7 +144,7 @@ public:
 	 * @param idx The index of the ConfigNode that is the root of the imported configuration.
 	 * @param data This container holds the data needed to undo and redo the import.
 	 */
-	Q_INVOKABLE void createImportConfigurationCommand (TreeViewModel * model, int idx, DataContainer * data);
+	Q_INVOKABLE void createImportConfigurationCommand (const QModelIndex &index, DataContainer* data);
 
 	/**
 	 * @brief This function is called when the configuration is saved; if the user closes the application
@@ -208,10 +208,10 @@ public Q_SLOTS:
 	void redo ();
 
 private:
-	QUndoStack * m_undoStack;
-	QClipboard * m_clipboard;
-	QString m_clipboardType;
-	bool m_clipboardEmpty;
+	QUndoStack	*	m_undoStack;
+	QClipboard	*	m_clipboard;
+	QString			m_clipboardType;
+	bool			m_clipboardEmpty;
 	TreeViewModel * m_clipboardModel;
 };
 
