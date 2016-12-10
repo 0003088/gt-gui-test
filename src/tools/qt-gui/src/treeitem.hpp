@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <kdb.hpp>
+#include <kdbease.h>
 #define QT_SHAREDPOINTER_TRACK_POINTERS
 #include <QSharedPointer>
 #include "metamodel.hpp"
@@ -13,13 +14,14 @@ class TreeItem : public QObject
 
 public:
 	explicit			TreeItem(const QString& baseName, const QString& name, const kdb::Key& key, QSharedPointer<TreeItem> parent);
-						TreeItem(const TreeItem& other);
-						TreeItem() {}
-						~TreeItem();
+	TreeItem(const TreeItem& other);
+	TreeItem() {}
+	~TreeItem();
 
 	QString								baseName() const;
 	QString								name() const;
 	QString								toString() const;
+	QString								getCurrentArrayNo () const;
 
 	QVariant							value() const;
 
@@ -44,6 +46,7 @@ public:
 	void								appendChild(QSharedPointer<TreeItem> child);
 	void								updateNode(const kdb::Key &key);
 	void								clear();
+	void								refreshArrayNumbers ();
 
 	bool								hasChild(const QString &name) const;
 	bool								isDirty() const;

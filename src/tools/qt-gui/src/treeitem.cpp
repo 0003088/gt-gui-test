@@ -1,6 +1,7 @@
 #include "treeitem.hpp"
 #include <QtQml>
 #include <QDebug>
+#include <kdbproposal.h>
 
 using namespace kdb;
 
@@ -94,6 +95,28 @@ QString TreeItem::name() const
 QString TreeItem::toString() const
 {
 	return QString(m_name + ", " + m_parent->name());
+}
+
+QString TreeItem::getCurrentArrayNo() const
+{
+	TreeItemPtr max (nullptr);
+
+	foreach (TreeItemPtr item, m_children)
+	{
+		if (item->baseName().startsWith ("#"))
+		{
+			max = item;
+		}
+	}
+
+	if (max)
+	{
+		Key k = max->key();
+		ckdb::elektraArrayIncName (k.getKey ());
+		return QString::fromStdString (k.getBaseName ());
+	}
+
+	return "#0";
 }
 
 void TreeItem::setName(const QString &name)
@@ -271,6 +294,36 @@ void TreeItem::appendChild(TreeItemPtr child)
 void TreeItem::clear()
 {
 	m_children.clear();
+}
+
+void TreeItem::refreshArrayNumbers()
+{
+	QList<TreeItemPtr> arrayElements;
+
+	foreach (TreeItemPtr node, m_children)
+	{
+		if (node->baseName().startsWith ("#"))
+		{
+			arrayElements.append (node);
+		}
+	}
+
+	if (!arrayElements.isEmpty ())
+	{
+
+		arrayElements.at (0)->setBaseName ("#0");
+
+		if (arrayElements.count () > 1)
+		{
+
+			for (int i = 1; i < arrayElements.count (); i++)
+			{
+				Key k = arrayElements.at (i - 1)->key ().dup ();
+				ckdb::elektraArrayIncName (k.getKey ());
+				arrayElements.at (i)->setBaseName (QString::fromStdString (k.getBaseName ()));
+			}
+		}
+	}
 }
 
 void TreeItem::populateMetaModel()

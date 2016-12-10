@@ -61,7 +61,7 @@ int main (int argc, char * argv[])
 	GUIBackend backend;
 	GUISettings settings;
 	kdb::tools::merging::MergingKDB kdb;
-	TreeModel treeModel;
+	TreeModel treeModel(&kdb);
 	NoLeavesProxyModel treeFilter;
 	OnlyLeavesProxyModel tableFilter;
 

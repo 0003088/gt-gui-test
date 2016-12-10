@@ -18,7 +18,7 @@ public:
 	};
 
 	explicit MetaModel(kdb::Key key, const QObject* parent = 0);
-	MetaModel(const QObject* parent = 0) {}
+	MetaModel(const QObject* parent = 0) {Q_UNUSED(parent)}
 	MetaModel(const MetaModel &other) {Q_UNUSED(other)}
 
 	int												rowCount(const QModelIndex &parent = QModelIndex()) const;

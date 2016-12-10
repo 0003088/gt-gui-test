@@ -63,9 +63,9 @@ ApplicationWindow {
 		onShowMessage: {
 			ErrorDialog.showMessage(title, text, detailedText)
 		}
-		onUpdateIndicator: {
-			treeView.updateIndicator()
-		}
+//		onUpdateIndicator: {
+//			treeView.updateIndicator()
+//		}
 		onInvalidateFilter: {
 			treeView.updateIndicator()
 			treeViewSelection.reset()
@@ -278,6 +278,25 @@ ApplicationWindow {
 
 	KeyAreaContextMenu {
 		id: keyAreaContextMenu
+	}
+
+	statusBar: StatusBar {
+		id:mainStatusBar
+
+		RowLayout {
+			id: statusBarRow
+
+			Label {
+				id: path
+
+				signal selectionChanged()
+
+				anchors.fill: parent
+				anchors.leftMargin: defaultMargins
+				onSelectionChanged: text = !treeViewSelection.hasSelection ? "" : treeModel.data(noLeavesProxyModel.mapToSource(treeViewSelection.currentIndex), 258) +
+														 (!keyViewSelection.hasSelection ? "" :  "/" + treeModel.data(onlyLeavesProxyModel.mapToSource(keyViewSelection.currentIndex), 257))
+			}
+		}
 	}
 
 	//Search Results Area Context Menu
@@ -604,21 +623,6 @@ ApplicationWindow {
 					target: searchResultsArea
 					visible: true
 				}
-			}
-		}
-	}
-
-	statusBar: StatusBar {
-		id:mainStatusBar
-
-		RowLayout {
-			id: statusBarRow
-
-			Label {
-				id: path
-				anchors.fill: parent
-				anchors.leftMargin: defaultMargins
-				text: treeView.currentNode === null ? "" : treeView.currentNode.path + (keyAreaSelectedItem === null ? "" : "/" + keyAreaSelectedItem.name)
 			}
 		}
 	}

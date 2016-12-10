@@ -58,14 +58,14 @@ QVariant TreeViewModel::data (const QModelIndex & idx, int role) const
 	if (!idx.isValid ())
 	{
 		emit showMessage (tr ("Error"), tr ("Index not valid."),
-				  QString ("TreeViewModel::data: Index = %1,\nModel size = %2").arg (idx.row ()).arg (m_model.count ()));
+		QString ("TreeViewModel::data: Index = %1,\nModel size = %2").arg (idx.row ()).arg (m_model.count ()));
 		return QVariant ();
 	}
 
 	if (idx.row () > (m_model.size () - 1))
 	{
 		emit showMessage (tr ("Error"), QString (tr ("Index too high. ")),
-				  QString ("TreeViewModel::data: Index: %1").arg (idx.row ()));
+		QString ("TreeViewModel::data: Index: %1").arg (idx.row ()));
 		return QVariant ();
 	}
 
@@ -129,7 +129,7 @@ bool TreeViewModel::setData (const QModelIndex & idx, const QVariant & modelData
 	if (!idx.isValid () || idx.row () > (m_model.size () - 1))
 	{
 		emit showMessage (tr ("Error"), tr ("Index not valid."),
-				  QString ("TreeViewModel::setData: Index = %1,\nModel size = %2").arg (idx.row ()).arg (m_model.count ()));
+		QString ("TreeViewModel::setData: Index = %1,\nModel size = %2").arg (idx.row ()).arg (m_model.count ()));
 		return false;
 	}
 
@@ -212,8 +212,8 @@ void TreeViewModel::importConfiguration (const QString & name, const QString & f
 	if (!errors.isEmpty ())
 	{
 		emit showMessage (tr ("Error"),
-				  tr ("Failed to import configuration from %1 to %2.").arg (file, QString::fromStdString (root.getName ())),
-				  errors);
+		tr ("Failed to import configuration from %1 to %2.").arg (file, QString::fromStdString (root.getName ())),
+		errors);
 		return;
 	}
 
@@ -231,7 +231,7 @@ void TreeViewModel::importConfiguration (const QString & name, const QString & f
 	try
 	{
 		result = merger.mergeKeySet (
-			MergeTask (BaseMergeKeys (base, root), OurMergeKeys (base, root), TheirMergeKeys (importedKeys, root), root));
+		MergeTask (BaseMergeKeys (base, root), OurMergeKeys (base, root), TheirMergeKeys (importedKeys, root), root));
 	}
 	catch (...) // TODO: Which exceptions are possible?
 	{
@@ -263,9 +263,9 @@ void TreeViewModel::importConfiguration (const QString & name, const QString & f
 		}
 
 		emit showMessage (
-			tr ("Error"),
-			tr ("The were conflicts importing %1 (%2 format) into %3, no configuration was imported.").arg (file, format, name),
-			conflicts.join ("\n"));
+		tr ("Error"),
+		tr ("The were conflicts importing %1 (%2 format) into %3, no configuration was imported.").arg (file, format, name),
+		conflicts.join ("\n"));
 	}
 }
 
@@ -302,25 +302,25 @@ void TreeViewModel::exportConfiguration (TreeViewModel * parentModel, int idx, Q
 
 	if (errors.isEmpty () && !warnings.isEmpty ())
 		emit showMessage (tr ("Information"), tr ("Successfully exported configuration below %1 to %2, warnings were issued.")
-							      .arg (QString::fromStdString (root.getName ()), file),
-				  "");
+	.arg (QString::fromStdString (root.getName ()), file),
+	"");
 	else if (!errors.isEmpty () && warnings.isEmpty ())
 		emit showMessage (
-			tr ("Error"),
-			tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file), errors);
+	tr ("Error"),
+	tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file), errors);
 	else if (!errors.isEmpty () && !warnings.isEmpty ())
 		emit showMessage (
-			tr ("Error"),
-			tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file),
-			warnings + "\n" + errors);
+	tr ("Error"),
+	tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file),
+	warnings + "\n" + errors);
 }
 
 KeySet TreeViewModel::collectCurrentKeySet ()
 {
-	KeySetVisitor ksVisit;
-	accept (ksVisit);
+//	KeySetVisitor ksVisit;
+//	accept (ksVisit);
 
-	return ksVisit.getKeySet ();
+//	return ksVisit.getKeySet ();
 }
 
 Qt::ItemFlags TreeViewModel::flags (const QModelIndex & idx) const
@@ -356,7 +356,7 @@ QVariant TreeViewModel::find (const QString & term)
 	if (searchResults->rowCount () == 0)
 	{
 		searchResults->model ().append (
-			ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
+		ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
 	}
 
 	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
@@ -371,7 +371,7 @@ bool TreeViewModel::removeRow (int row, const QModelIndex & parentIndex)
 	if (row < 0 || row > m_model.size () - 1)
 	{
 		emit showMessage (tr ("Error"), tr ("Index not valid."),
-				  QString ("TreeViewModel::removeRow: Index = %1, Model size = %2").arg (m_model.size ()).arg (row));
+		QString ("TreeViewModel::removeRow: Index = %1, Model size = %2").arg (m_model.size ()).arg (row));
 		return false;
 	}
 
@@ -593,7 +593,7 @@ void printKeys (KeySet const & theirs, KeySet const & base, KeySet const & ours)
 		Key t = theirs.next ();
 		Key b = base.next ();
 		if (!((o && !o.getName ().compare (0, prefix.size (), prefix)) &&
-		      (t && !t.getName ().compare (0, prefix.size (), prefix)) && (b && !b.getName ().compare (0, prefix.size (), prefix))))
+		(t && !t.getName ().compare (0, prefix.size (), prefix)) && (b && !b.getName ().compare (0, prefix.size (), prefix))))
 			continue;
 		std::cout << printKey (o);
 		;
@@ -796,7 +796,7 @@ void TreeViewModel::showConfigNodeMessage (QString title, QString text, QString 
 void TreeViewModel::connectDBus ()
 {
 	if (QDBusConnection::sessionBus ().connect (QString (), "/org/libelektra/configuration", "org.libelektra", QString (), this,
-						    SLOT (configChanged (QString))))
+	SLOT (configChanged (QString))))
 	{
 		ELEKTRA_LOG ("Successfully connected to DBus");
 	}

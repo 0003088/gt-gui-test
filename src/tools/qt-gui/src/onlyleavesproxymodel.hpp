@@ -8,7 +8,7 @@ class OnlyLeavesProxyModel : public QSortFilterProxyModel
 	Q_OBJECT
 
 public:
-	explicit OnlyLeavesProxyModel(QObject *parent = 0) {}
+	explicit OnlyLeavesProxyModel(QObject *parent = 0) {Q_UNUSED(parent)}
 
 	bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 	void setSourceModel(QAbstractItemModel *sourceModel);

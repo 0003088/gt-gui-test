@@ -149,8 +149,8 @@ BasicWindow {
 	onClosing: {
 		if (optionEdited) {
 			guiSettings.setKDB()
-			treeView.treeModel.synchronize()
-			treeView.treeModel.refresh()
+			treeModel.synchronize()
+//			treeView.treeModel.refresh()
 			optionEdited = false
 		}
 	}

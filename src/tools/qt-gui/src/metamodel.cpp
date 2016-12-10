@@ -2,13 +2,14 @@
 #include <QDebug>
 
 MetaModel::MetaModel(kdb::Key key, const QObject *parent)
-	: m_key(key)
+: m_key(key)
 {
-
+	Q_UNUSED(parent)
 }
 
 int MetaModel::rowCount(const QModelIndex &parent) const
 {
+	Q_UNUSED(parent)
 	return m_model.count();
 }
 

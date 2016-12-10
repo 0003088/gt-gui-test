@@ -9,13 +9,15 @@
 #ifndef KEYSETVISITOR_HPP
 #define KEYSETVISITOR_HPP
 
-#include "confignode.hpp"
+#include "treemodel.hpp"
 #include "visitor.hpp"
 #include <kdb.hpp>
 
 /**
  * @brief The KeySetVisitor class. It visits every existing ConfigNode and collects the encapsuled key, if it exists.
  */
+
+class TreeModel;
 
 class KeySetVisitor : public Visitor
 {
@@ -25,8 +27,8 @@ public:
 	 */
 	explicit KeySetVisitor ();
 
-	void visit (ConfigNode & node) override;
-	void visit (TreeViewModel * model) override;
+	void visit (TreeItem &item);// override;
+	void visit (TreeModel *model);// override;
 
 	/**
 	 * @brief getKeySet Returns the kdb::KeySet with all current valid keys

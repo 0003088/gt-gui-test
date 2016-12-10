@@ -7,7 +7,7 @@
  */
 
 #include "keysetvisitor.hpp"
-#include "treeviewmodel.hpp"
+#include "treemodel.hpp"
 
 using namespace kdb;
 
@@ -15,25 +15,25 @@ KeySetVisitor::KeySetVisitor ()
 {
 }
 
-void KeySetVisitor::visit (ConfigNode & node)
+void KeySetVisitor::visit (TreeItem & item)
 {
-	Key key = node.getKey ();
+//	Key key = item.key();
 
-	if (key && key.isValid ())
-	{
-		m_set.append (key);
-	}
+//	if (key && key.isValid ())
+//	{
+//		m_set.append (key);
+//	}
 }
 
-void KeySetVisitor::visit (TreeViewModel * model)
+void KeySetVisitor::visit (TreeModel * model)
 {
-	foreach (ConfigNodePtr node, model->model ())
-	{
-		node->accept (*this);
-	}
+//	foreach (TreeItemPtr node, model->model ())
+//	{
+//		node->accept (*this);
+//	}
 }
 
 KeySet KeySetVisitor::getKeySet ()
 {
-	return m_set.dup ();
+//	return m_set.dup ();
 }

@@ -16,9 +16,9 @@
 #include <merging/mergingkdb.hpp>
 
 #include "treeitem.hpp"
-//#include "findvisitor.hpp"
-//#include "keysetvisitor.hpp"
-//#include "printvisitor.hpp"
+#include "findvisitor.hpp"
+#include "keysetvisitor.hpp"
+#include "printvisitor.hpp"
 
 class Visitor;
 
@@ -47,8 +47,11 @@ public:
 		HierarchyRole
 	};
 
-	explicit TreeModel(QObject *parent = 0);
-	TreeModel(const TreeModel &other) {Q_UNUSED(other)}
+	explicit TreeModel (QObject * parentModel = nullptr);
+
+	explicit TreeModel (kdb::tools::merging::MergingKDB * kdb, QObject * parentModel = nullptr);
+
+	TreeModel (TreeModel const & other);
 
 	QModelIndex				index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 	QModelIndex				parent(const QModelIndex &child) const;
@@ -58,20 +61,27 @@ public:
 	int						columnCount(const QModelIndex &parent = QModelIndex()) const;
 
 	QVariant				data(const QModelIndex &index, int role) const;
+	Q_INVOKABLE QVariant	find (const QString & term);
 
 	bool					setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 	//	bool					insertRow(int row, const QModelIndex &parent, TreeItemPtr item, bool addParent = true);
 	bool					insertRows(int row, int count, const QModelIndex &parent);
 	bool					removeRows(int row, int count, const QModelIndex &parent);
-	bool					hasChildren(const QModelIndex &parent) const;
+	//bool					hasChildren(const QModelIndex &parent) const;
 
 	void					sink(TreeItemPtr item, QStringList keys, const kdb::Key &key);
 	void					populateModel(const kdb::KeySet &keySet);
 	void					populateModel();
 	void					createNewNodes(kdb::KeySet keySet);
 	void					setItemsToInsert(const QList<TreeItemPtr> &itemsToInsert);
+	void					accept (Visitor & visitor);
+	Q_INVOKABLE void		synchronize ();
+	Q_INVOKABLE void		exportConfiguration (QModelIndex idx, QString format, QString file);
+	Q_INVOKABLE void		importConfiguration (const QString & name, QString & file, QString & format, const QVariantList & mergeStrategies);
+	Q_INVOKABLE void		unMountBackend (QString backendName);
 
 	QStringList				getSplittedKeyname(const kdb::Key &key);
+	Q_INVOKABLE QStringList mountedBackends ();
 
 	Qt::ItemFlags			flags(const QModelIndex &index) const;
 
@@ -81,15 +91,31 @@ public:
 
 	QList<TreeItemPtr>		getItemsToInsert() const;
 
+	kdb::KeySet				collectCurrentKeySet ();
+
 signals:
 	void					invalidateFilter() const;
+	void					showMessage (QString title, QString text, QString detailedText) const;
 
 private:
-	TreeItemPtr				m_rootItem;
-	kdb::KDB				m_kdb;
-	TreeItem				*getItem(const QModelIndex &index) const;
-	TreeItemPtr				getItemPtr(const QModelIndex &index) const;
-	QList<TreeItemPtr>		m_itemsToInsert;
+	TreeItemPtr							m_rootItem;
+	TreeItemPtr							getItemPtr(const QModelIndex &index) const;
+	TreeItem						*	getItem(const QModelIndex &index) const;
+
+	kdb::Key							m_root;
+	//kdb::KDB				m_kdb;
+	kdb::tools::merging::MergingKDB *	m_kdb;
+	kdb::tools::merging::MergeConflictStrategy * getMergeStrategy (const QString & mergeStrategy);
+
+	QList<TreeItemPtr>					m_itemsToInsert;
+
+	void								connectDBus ();
+
+	QStringList							getConflicts(const kdb::KeySet &conflictSet);
+
+public slots:
+	void configChanged (QString msg);
+
 };
 
 Q_DECLARE_METATYPE(TreeModel)
