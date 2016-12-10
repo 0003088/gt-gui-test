@@ -148,19 +148,19 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 
 QVariant TreeModel::find(const QString &term)
 {
-//	auto searchResults = new TreeViewModel;
-//	FindVisitor fVisit (searchResults, term);
-//	accept (fVisit);
+	//	auto searchResults = new TreeViewModel;
+	//	FindVisitor fVisit (searchResults, term);
+	//	accept (fVisit);
 
-//	if (searchResults->rowCount () == 0)
-//	{
-//		searchResults->model ().append (
-//		ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
-//	}
+	//	if (searchResults->rowCount () == 0)
+	//	{
+	//		searchResults->model ().append (
+	//		ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
+	//	}
 
-//	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
+	//	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
 
-//	return QVariant::fromValue (searchResults);
+	//	return QVariant::fromValue (searchResults);
 }
 
 bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -392,7 +392,7 @@ void TreeModel::configChanged(QString msg)
 	ELEKTRA_LOG ("config changed: %s", msg.toLocal8Bit ().data ());
 
 	synchronize ();
-//	refresh ();
+	//	refresh ();
 }
 
 QList<TreeItemPtr> TreeModel::getItemsToInsert() const
@@ -402,20 +402,15 @@ QList<TreeItemPtr> TreeModel::getItemsToInsert() const
 
 KeySet TreeModel::collectCurrentKeySet()
 {
-//	KeySetVisitor ksVisit;
-//	accept (ksVisit);
+	KeySetVisitor ksVisit;
+	m_rootItem->accept (ksVisit);
 
-//	return ksVisit.getKeySet ();
+	return ksVisit.getKeySet ();
 }
 
 void TreeModel::setItemsToInsert(const QList<TreeItemPtr> &itemsToInsert)
 {
 	m_itemsToInsert = itemsToInsert;
-}
-
-void TreeModel::accept(Visitor &visitor)
-{
-//	visitor.visit (this);
 }
 
 void TreeModel::synchronize()
@@ -474,48 +469,48 @@ QStringList TreeModel::getConflicts (KeySet const & conflictSet)
 
 void TreeModel::exportConfiguration(QModelIndex idx, QString format, QString file)
 {
-//	KeySet ks = collectCurrentKeySet ();
-//	Key root = parentModel->model ().at (idx)->getKey ();
+	//	KeySet ks = collectCurrentKeySet ();
+	//	Key root = parentModel->model ().at (idx)->getKey ();
 
-//	// Node is only a filler
-//	if (!root) root = Key (parentModel->model ().at (idx)->getPath ().toStdString (), KEY_END);
+	//	// Node is only a filler
+	//	if (!root) root = Key (parentModel->model ().at (idx)->getPath ().toStdString (), KEY_END);
 
-//	KeySet part (ks.cut (root));
+	//	KeySet part (ks.cut (root));
 
-//	string formatString = format.toStdString ();
-//	string fileString = file.remove ("file://").toStdString ();
+	//	string formatString = format.toStdString ();
+	//	string fileString = file.remove ("file://").toStdString ();
 
-//	Modules modules;
-//	PluginPtr plugin = modules.load (formatString);
+	//	Modules modules;
+	//	PluginPtr plugin = modules.load (formatString);
 
-//	Key errorKey (root);
-//	errorKey.setString (fileString);
+	//	Key errorKey (root);
+	//	errorKey.setString (fileString);
 
-//	plugin->set (part, errorKey);
+	//	plugin->set (part, errorKey);
 
-//	stringstream ws;
-//	stringstream es;
-//	QString warnings;
-//	QString errors;
+	//	stringstream ws;
+	//	stringstream es;
+	//	QString warnings;
+	//	QString errors;
 
-//	printWarnings (ws, errorKey);
-//	warnings = QString::fromStdString (ws.str ());
-//	printError (es, errorKey);
-//	errors = QString::fromStdString (es.str ());
+	//	printWarnings (ws, errorKey);
+	//	warnings = QString::fromStdString (ws.str ());
+	//	printError (es, errorKey);
+	//	errors = QString::fromStdString (es.str ());
 
-//	if (errors.isEmpty () && !warnings.isEmpty ())
-//		emit showMessage (tr ("Information"), tr ("Successfully exported configuration below %1 to %2, warnings were issued.")
-//	.arg (QString::fromStdString (root.getName ()), file),
-//	"");
-//	else if (!errors.isEmpty () && warnings.isEmpty ())
-//		emit showMessage (
-//	tr ("Error"),
-//	tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file), errors);
-//	else if (!errors.isEmpty () && !warnings.isEmpty ())
-//		emit showMessage (
-//	tr ("Error"),
-//	tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file),
-//	warnings + "\n" + errors);
+	//	if (errors.isEmpty () && !warnings.isEmpty ())
+	//		emit showMessage (tr ("Information"), tr ("Successfully exported configuration below %1 to %2, warnings were issued.")
+	//	.arg (QString::fromStdString (root.getName ()), file),
+	//	"");
+	//	else if (!errors.isEmpty () && warnings.isEmpty ())
+	//		emit showMessage (
+	//	tr ("Error"),
+	//	tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file), errors);
+	//	else if (!errors.isEmpty () && !warnings.isEmpty ())
+	//		emit showMessage (
+	//	tr ("Error"),
+	//	tr ("Failed to export configuration below %1 to %2.").arg (QString::fromStdString (root.getName ()), file),
+	//	warnings + "\n" + errors);
 }
 
 void TreeModel::importConfiguration(const QString &name, QString &file, QString &format, const QVariantList &mergeStrategies)

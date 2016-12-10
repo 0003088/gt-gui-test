@@ -1,8 +1,8 @@
 #include "metaitem.hpp"
 
-MetaItem::MetaItem(const QString &metaName, const QVariant &metaValue)
-	: m_metaName(metaName)
-	, m_metaValue(metaValue)
+MetaItem::MetaItem(const QString &metaName, const QVariant &metaValue, const QObject *parent)
+: m_metaName(metaName)
+, m_metaValue(metaValue)
 {
 
 }

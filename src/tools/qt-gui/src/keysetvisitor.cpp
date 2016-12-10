@@ -17,23 +17,16 @@ KeySetVisitor::KeySetVisitor ()
 
 void KeySetVisitor::visit (TreeItem & item)
 {
-//	Key key = item.key();
+	Key key = item.key();
 
-//	if (key && key.isValid ())
-//	{
-//		m_set.append (key);
-//	}
-}
-
-void KeySetVisitor::visit (TreeModel * model)
-{
-//	foreach (TreeItemPtr node, model->model ())
-//	{
-//		node->accept (*this);
-//	}
+	if (key && key.isValid ())
+	{
+		m_set.append (key);
+//		qDebug() << "added " << QString::fromStdString(key.getFullName()) << " to set ";
+	}
 }
 
 KeySet KeySetVisitor::getKeySet ()
 {
-//	return m_set.dup ();
+	return m_set.dup ();
 }

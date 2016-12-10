@@ -20,7 +20,7 @@ QVariant MetaModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 	}
 
-	MetaItem* item = m_model.at(index.row());
+	MetaItemPtr item = m_model.at(index.row());
 
 	switch (role)
 	{
@@ -42,7 +42,7 @@ void MetaModel::clear()
 	endResetModel();
 }
 
-void MetaModel::insertRow(int row, MetaItem *item)
+void MetaModel::insertRow(int row, MetaItemPtr item)
 {
 	beginInsertRows(QModelIndex(), row, row);
 	m_model.insert(row, item);
@@ -61,7 +61,7 @@ QVariantMap MetaModel::get(const int& idx) const
 	return map;
 }
 
-QList<MetaItem *> MetaModel::children() const
+QList<MetaItemPtr> MetaModel::children() const
 {
 	return m_model;
 }
@@ -69,14 +69,14 @@ QList<MetaItem *> MetaModel::children() const
 void MetaModel::setMetaData(const QVariantMap &metaData)
 {
 	//delete old metadata in key
-	foreach(MetaItem* item, m_model)
+	foreach(MetaItemPtr item, m_model)
 		deleteKeyMetaData(item->metaName());
 
 	//delete old metadata in model
 	clear();
 
 	for(QVariantMap::const_iterator iter = metaData.begin(); iter != metaData.end(); iter++) {
-		insertRow(m_model.count(), new MetaItem(iter.key(), iter.value()));
+		insertRow(m_model.count(), MetaItemPtr(new MetaItem(iter.key(), iter.value())));
 	}
 }
 

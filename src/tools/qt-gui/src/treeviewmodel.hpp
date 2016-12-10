@@ -147,7 +147,7 @@ public:
 	 * @brief The method thats accepts a Visitor object to support the Vistor Pattern.
 	 * @param visitor The visitor that visits this TreeViewModel.
 	 */
-	void accept (Visitor & visitor);
+//	void accept (Visitor & visitor);
 
 	/**
 	 * @brief Get the roles of a ConfigNode at the specifies index. Needed to access roles from outside a delegate in QML.
@@ -232,7 +232,7 @@ public:
 	 * @param mergeStrategies The mergeStrategies in case of conflict.
 	 */
 	Q_INVOKABLE void importConfiguration (const QString & name, const QString & file, QString & format,
-					      const QVariantList & mergeStrategies);
+	const QVariantList & mergeStrategies);
 
 	/**
 	 * @brief Stores the current state of the configuration in the KeySet.
@@ -300,8 +300,8 @@ private:
 	kdb::tools::merging::MergeConflictStrategy * getMergeStrategy (const QString & mergeStrategy);
 
 	/**
-         * @brief Connect to system D-Bus
-         */
+		 * @brief Connect to system D-Bus
+		 */
 	void connectDBus ();
 
 protected:

@@ -43,9 +43,10 @@ TreeItem::TreeItem(const TreeItem &other)
 	if(other.m_metaData)
 	{
 		m_metaData = new MetaModel(m_key);
-		foreach(MetaItem* item , other.m_metaData->children())
+
+		foreach(MetaItemPtr item , other.m_metaData->children())
 		{
-			m_metaData->insertRow(m_metaData->rowCount(), new MetaItem(*item));
+			m_metaData->insertRow(m_metaData->rowCount(), MetaItemPtr(new MetaItem(item->metaName(),item->metaValue())));
 		}
 	}
 }
@@ -326,6 +327,18 @@ void TreeItem::refreshArrayNumbers()
 	}
 }
 
+void TreeItem::accept (Visitor & visitor)
+{
+//	qDebug() << m_name << " accepted KSV ";
+	visitor.visit (*this);
+
+	if (!m_children.empty())
+	{
+		foreach (TreeItemPtr node, m_children)
+			node->accept (visitor);
+	}
+}
+
 void TreeItem::populateMetaModel()
 {
 	if (m_key)
@@ -335,7 +348,7 @@ void TreeItem::populateMetaModel()
 
 		while (m_key.nextMeta())
 		{
-			MetaItem* item = new MetaItem(QString::fromStdString(m_key.currentMeta().getName()), QVariant::fromValue(QString::fromStdString(m_key.currentMeta().getString())));
+			MetaItemPtr item = MetaItemPtr(new MetaItem(QString::fromStdString(m_key.currentMeta().getName()), QVariant::fromValue(QString::fromStdString(m_key.currentMeta().getString()))));
 			m_metaData->insertRow(m_metaData->rowCount(), item);
 		}
 	}

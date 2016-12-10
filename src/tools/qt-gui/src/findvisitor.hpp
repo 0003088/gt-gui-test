@@ -27,8 +27,7 @@ public:
 	 */
 	explicit FindVisitor (TreeViewModel * searchResults, QString term);
 
-	void visit (ConfigNode & node) override;
-	void visit (TreeViewModel * model) override;
+	void visit (TreeItem & item) override;
 
 private:
 	TreeViewModel * m_searchResults;

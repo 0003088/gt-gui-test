@@ -13,36 +13,36 @@ FindVisitor::FindVisitor (TreeViewModel * searchResults, QString term) : m_searc
 {
 }
 
-void FindVisitor::visit (ConfigNode & node)
+void FindVisitor::visit (TreeItem &item)
 {
-	bool termFound = false;
+//	bool termFound = false;
 
-	if (node.getPath ().contains (m_term) || node.getValue ().toString ().contains (m_term))
-	{
-		termFound = true;
-	}
+//	if (item.name().contains (m_term) || item.value().toString ().contains (m_term))
+//	{
+//		termFound = true;
+//	}
 
-	if (node.getMetaKeys () && !termFound)
-	{
-		foreach (ConfigNodePtr metaNode, node.getMetaKeys ()->model ())
-		{
-			if (metaNode->getName ().contains (m_term) || metaNode->getValue ().toString ().contains (m_term))
-			{
-				termFound = true;
-				break;
-			}
-		}
-	}
+//	if (item.metaData() && !termFound)
+//	{
+//		foreach (MetaItemPtr metaNode, item.)
+//		{
+//			if (metaNode->getName ().contains (m_term) || metaNode->getValue ().toString ().contains (m_term))
+//			{
+//				termFound = true;
+//				break;
+//			}
+//		}
+//	}
 
-	if (termFound)
-		// let the other model delete this node
-		m_searchResults->insertRow (m_searchResults->rowCount (), ConfigNodePtr (&node, &ConfigNode::dontDelete), false);
+//	if (termFound)
+//		// let the other model delete this node
+//		m_searchResults->insertRow (m_searchResults->rowCount (), ConfigNodePtr (&item, &ConfigNode::dontDelete), false);
 }
 
-void FindVisitor::visit (TreeViewModel * model)
-{
-	foreach (ConfigNodePtr node, model->model ())
-	{
-		node->accept (*this);
-	}
-}
+//void FindVisitor::visit (TreeViewModel * model)
+//{
+//	foreach (ConfigNodePtr node, model->model ())
+//	{
+//		node->accept (*this);
+//	}
+//}

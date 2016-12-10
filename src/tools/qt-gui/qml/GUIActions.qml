@@ -262,17 +262,17 @@ Item {
 	Action {
 		id: synchronizeAction
 
-//		text: qsTr("Synchronize")
-//		iconSource: "icons/view-refresh.png"
-//		iconName: Helper.useIcon("view-refresh")
-//		tooltip: qsTr("Synchronize")
-//		shortcut: StandardKey.Refresh
-//		enabled: !toggleViewerAction.checked
-//		onTriggered: {
-//			treeView.treeModel.synchronize()
-//			undoManager.setClean()
+		text: qsTr("Synchronize")
+		iconSource: "icons/view-refresh.png"
+		iconName: Helper.useIcon("view-refresh")
+		tooltip: qsTr("Synchronize")
+		shortcut: StandardKey.Refresh
+		enabled: !toggleViewerAction.checked
+		onTriggered: {
+			treeModel.synchronize()
+			undoManager.setClean()
 //			treeView.treeModel.refresh()
-//		}
+		}
 	}
 
 	Action {

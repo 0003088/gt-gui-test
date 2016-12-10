@@ -11,23 +11,23 @@
 #include "confignode.hpp"
 #include "treeviewmodel.hpp"
 
-void PrintVisitor::visit (ConfigNode & node)
+void PrintVisitor::visit (TreeItem &item)
 {
-	QStringList path = node.getPath ().split ("/");
+	QStringList path = item.name().split ("/");
 	QString name;
 
 	foreach (QString s, path)
 		name += " ";
 
-	name += node.getName ();
+	name += item.baseName();
 
 	std::cout << name.toStdString () << std::endl;
 }
 
-void PrintVisitor::visit (TreeViewModel * model)
-{
-	foreach (ConfigNodePtr node, model->model ())
-	{
-		node->accept (*this);
-	}
-}
+//void PrintVisitor::visit (TreeViewModel * model)
+//{
+//	foreach (ConfigNodePtr node, model->model ())
+//	{
+//		node->accept (*this);
+//	}
+//}

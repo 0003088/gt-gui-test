@@ -330,10 +330,10 @@ Qt::ItemFlags TreeViewModel::flags (const QModelIndex & idx) const
 	return QAbstractItemModel::flags (idx) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
-void TreeViewModel::accept (Visitor & visitor)
-{
-	visitor.visit (this);
-}
+//void TreeViewModel::accept (Visitor & visitor)
+//{
+//	visitor.visit (this);
+//}
 
 QVariantMap TreeViewModel::get (const int & idx) const
 {
@@ -349,19 +349,19 @@ QVariantMap TreeViewModel::get (const int & idx) const
 
 QVariant TreeViewModel::find (const QString & term)
 {
-	auto searchResults = new TreeViewModel;
-	FindVisitor fVisit (searchResults, term);
-	accept (fVisit);
+//	auto searchResults = new TreeViewModel;
+//	FindVisitor fVisit (searchResults, term);
+//	accept (fVisit);
 
-	if (searchResults->rowCount () == 0)
-	{
-		searchResults->model ().append (
-		ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
-	}
+//	if (searchResults->rowCount () == 0)
+//	{
+//		searchResults->model ().append (
+//		ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
+//	}
 
-	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
+//	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
 
-	return QVariant::fromValue (searchResults);
+//	return QVariant::fromValue (searchResults);
 }
 
 bool TreeViewModel::removeRow (int row, const QModelIndex & parentIndex)

@@ -26,19 +26,18 @@ public:
 	QVariant										data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 	void											clear();
-	void											insertRow(int row, MetaItem *item);
+	void											insertRow(int row, MetaItemPtr item);
 	void											setMetaData(const QVariantMap &metaData);
 
 	QHash<int, QByteArray>							roleNames() const;
 
 	Q_INVOKABLE	QVariantMap							get(const int &idx) const;
 
-	QList<MetaItem*>								children() const;
-
+	QList<MetaItemPtr>								children() const;
 
 private:
 	kdb::Key										m_key;
-	QList<MetaItem*>								m_model;
+	QList<MetaItemPtr>								m_model;
 	void											deleteKeyMetaData(const QString &name);
 };
 

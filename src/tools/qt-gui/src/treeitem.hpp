@@ -7,13 +7,18 @@
 #define QT_SHAREDPOINTER_TRACK_POINTERS
 #include <QSharedPointer>
 #include "metamodel.hpp"
+#include "findvisitor.hpp"
+#include "keysetvisitor.hpp"
+#include "printvisitor.hpp"
+
+class Visitor;
 
 class TreeItem : public QObject
 {
 	Q_OBJECT
 
 public:
-	explicit			TreeItem(const QString& baseName, const QString& name, const kdb::Key& key, QSharedPointer<TreeItem> parent);
+	explicit TreeItem(const QString& baseName, const QString& name, const kdb::Key& key, QSharedPointer<TreeItem> parent);
 	TreeItem(const TreeItem& other);
 	TreeItem() {}
 	~TreeItem();
@@ -47,6 +52,7 @@ public:
 	void								updateNode(const kdb::Key &key);
 	void								clear();
 	void								refreshArrayNumbers ();
+	void								accept (Visitor & visitor);
 
 	bool								hasChild(const QString &name) const;
 	bool								isDirty() const;
@@ -75,7 +81,5 @@ private:
 	void								setKeyName(const QString &name);
 	int									getRowByName() const;
 };
-
-typedef QSharedPointer<TreeItem> TreeItemPtr;
 
 #endif // TREEITEM_HPP

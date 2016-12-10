@@ -21,13 +21,13 @@ public:
 	 * @brief visit
 	 * @param node
 	 */
-	void visit (ConfigNode & node) override;
+	void visit (TreeItem & item) override;
 
-	/**
-	 * @brief visit
-	 * @param model
-	 */
-	void visit (TreeViewModel * model) override;
+//	/**
+//	 * @brief visit
+//	 * @param model
+//	 */
+//	void visit (TreeViewModel * model) override;
 };
 
 #endif // PRINTVISITOR_HPP

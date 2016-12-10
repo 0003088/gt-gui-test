@@ -27,8 +27,7 @@ public:
 	 */
 	explicit KeySetVisitor ();
 
-	void visit (TreeItem &item);// override;
-	void visit (TreeModel *model);// override;
+	void visit (TreeItem &item) override;
 
 	/**
 	 * @brief getKeySet Returns the kdb::KeySet with all current valid keys

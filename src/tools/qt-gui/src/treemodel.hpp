@@ -16,14 +16,10 @@
 #include <merging/mergingkdb.hpp>
 
 #include "treeitem.hpp"
-#include "findvisitor.hpp"
-#include "keysetvisitor.hpp"
-#include "printvisitor.hpp"
-
-class Visitor;
 
 typedef QPair<int, int> PathItem;
 typedef QList<PathItem> Path;
+typedef QSharedPointer<TreeItem> TreeItemPtr;
 
 class TreeModel : public QAbstractItemModel
 {
@@ -74,7 +70,6 @@ public:
 	void					populateModel();
 	void					createNewNodes(kdb::KeySet keySet);
 	void					setItemsToInsert(const QList<TreeItemPtr> &itemsToInsert);
-	void					accept (Visitor & visitor);
 	Q_INVOKABLE void		synchronize ();
 	Q_INVOKABLE void		exportConfiguration (QModelIndex idx, QString format, QString file);
 	Q_INVOKABLE void		importConfiguration (const QString & name, QString & file, QString & format, const QVariantList & mergeStrategies);
