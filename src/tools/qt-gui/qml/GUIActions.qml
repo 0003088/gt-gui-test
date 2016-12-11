@@ -30,45 +30,45 @@ Item {
 	Action {
 		id: newKeyAction
 
-		text: qsTr("&Key ...")
-		iconSource: "icons/document-new.png"
-		iconName: Helper.useIcon("document-new")
-		tooltip: qsTr("New Key")
-		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+//		text: qsTr("&Key ...")
+//		iconSource: "icons/document-new.png"
+//		iconName: Helper.useIcon("document-new")
+//		tooltip: qsTr("New Key")
+//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
 
-		onTriggered: {
+//		onTriggered: {
 
-			if(source.src === "keyBelow"){
-				newKeyWindow.selectedNode = keyAreaSelectedItem
-				newKeyWindow.isBelow = true
-			}
-			else
-				newKeyWindow.selectedNode = treeView.currentNode
+//			if(source.src === "keyBelow"){
+//				newKeyWindow.selectedNode = keyAreaSelectedItem
+//				newKeyWindow.isBelow = true
+//			}
+//			else
+//				newKeyWindow.selectedNode = treeView.currentNode
 
-			newKeyWindow.show()
-		}
+//			newKeyWindow.show()
+//		}
 	}
 
 	Action {
 		id:newArrayAction
 
-		text: qsTr("&Array Entry ...")
-		iconSource: "icons/new-array.png"
-		iconName: Helper.useIcon("view-grid")
-		tooltip: qsTr("New Array Entry")
-		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+//		text: qsTr("&Array Entry ...")
+//		iconSource: "icons/new-array.png"
+//		iconName: Helper.useIcon("view-grid")
+//		tooltip: qsTr("New Array Entry")
+//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
 
-		onTriggered: {
+//		onTriggered: {
 
-			if(source.src === "arrBelow"){
-				newArrayWindow.selectedNode = keyAreaSelectedItem
-				newArrayWindow.isBelow = true
-			}
-			else
-				newArrayWindow.selectedNode = treeView.currentNode
+//			if(source.src === "arrBelow"){
+//				newArrayWindow.selectedNode = keyAreaSelectedItem
+//				newArrayWindow.isBelow = true
+//			}
+//			else
+//				newArrayWindow.selectedNode = treeView.currentNode
 
-			newArrayWindow.show()
-		}
+//			newArrayWindow.show()
+//		}
 	}
 
 	Action {
@@ -95,26 +95,26 @@ Item {
 	Action {
 		id: importAction
 
-		text: qsTr("&Import Configuration ... ")
-		iconSource: "icons/import.png"
-		iconName: Helper.useIcon("document-import")
-		tooltip: qsTr("Import Configuration")
-		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
-		onTriggered: importDialog.show()
+//		text: qsTr("&Import Configuration ... ")
+//		iconSource: "icons/import.png"
+//		iconName: Helper.useIcon("document-import")
+//		tooltip: qsTr("Import Configuration")
+//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+//		onTriggered: importDialog.show()
 	}
 
 	Action {
 		id: exportAction
 
-		text: qsTr("E&xport Configuration ... ")
-		iconSource: "icons/export.png"
-		iconName: Helper.useIcon("document-export")
-		tooltip: qsTr("Export Configuration")
-		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
-		onTriggered: {
-			exportDialog.nameFilters = guiBackend.nameFilters()
-			exportDialog.open()
-		}
+//		text: qsTr("E&xport Configuration ... ")
+//		iconSource: "icons/export.png"
+//		iconName: Helper.useIcon("document-export")
+//		tooltip: qsTr("Export Configuration")
+//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+//		onTriggered: {
+//			exportDialog.nameFilters = guiBackend.nameFilters()
+//			exportDialog.open()
+//		}
 	}
 
 	Action {
@@ -184,16 +184,16 @@ Item {
 	Action {
 		id: undoAllAction
 
-		text: qsTr("Undo All")
-		tooltip: qsTr("Undo All")
-		enabled: undoManager.canUndo && !toggleViewerAction.checked
-		onTriggered: {
-			//cannot use UndoStack::setIndex() because View-Updates would get lost
-			for(var i = undoManager.index(); i > undoManager.cleanIndex(); i--)
-				undoAction.trigger()
+//		text: qsTr("Undo All")
+//		tooltip: qsTr("Undo All")
+//		enabled: undoManager.canUndo && !toggleViewerAction.checked
+//		onTriggered: {
+//			//cannot use UndoStack::setIndex() because View-Updates would get lost
+//			for(var i = undoManager.index(); i > undoManager.cleanIndex(); i--)
+//				undoAction.trigger()
 
-			treeView.treeModel.refresh()
-		}
+//			treeView.treeModel.refresh()
+//		}
 	}
 
 	Action {
@@ -262,17 +262,17 @@ Item {
 	Action {
 		id: synchronizeAction
 
-		text: qsTr("Synchronize")
-		iconSource: "icons/view-refresh.png"
-		iconName: Helper.useIcon("view-refresh")
-		tooltip: qsTr("Synchronize")
-		shortcut: StandardKey.Refresh
-		enabled: !toggleViewerAction.checked
-		onTriggered: {
-			treeModel.synchronize()
-			undoManager.setClean()
-//			treeView.treeModel.refresh()
-		}
+//		text: qsTr("Synchronize")
+//		iconSource: "icons/view-refresh.png"
+//		iconName: Helper.useIcon("view-refresh")
+//		tooltip: qsTr("Synchronize")
+//		shortcut: StandardKey.Refresh
+//		enabled: !toggleViewerAction.checked
+//		onTriggered: {
+//			treeModel.synchronize()
+//			undoManager.setClean()
+////			treeView.treeModel.refresh()
+//		}
 	}
 
 	Action {

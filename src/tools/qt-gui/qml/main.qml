@@ -1,4 +1,4 @@
-import QtQuick 2.6
+import QtQuick 2.5
 import QtQuick.Controls 1.5
 import QtQml.Models 2.2
 import QtQuick.Controls.Styles 1.4
@@ -356,7 +356,7 @@ ApplicationWindow {
 						metaView.model = null
 					}
 					onUpdateRoot: {
-						tableView.rootIndex = onlyLeavesProxyModel.mapFromSource(noLeavesProxyModel.mapToSource(currentIndex))
+						tableView.rootIndex = onlyLeavesProxyModel.mapFromSource(noLeavesProxyModel.mapToSource(selection.currentIndex))
 					}
 				}
 
@@ -392,6 +392,27 @@ ApplicationWindow {
 						}
 					}
 				}
+
+				Keys.onPressed: {
+					if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)){
+						//editKeyWindow.selectedNode = searchResultsSelectedItem
+						guiActions.editAction.trigger()
+						event.accepted = true
+					}
+					else if(event.key === Qt.Key_Space){
+						if (treeView.isExpanded(currentIndex)){
+							console.debug("expanded") + " " + console.debug(currentIndex)
+							collapse(currentIndex)
+							event.accepted = true
+						}
+						else {
+							console.debug("collapsed") + " " + console.debug(currentIndex)
+							expand(currentIndex)
+							event.accepted = true
+						}
+					}
+				}
+
 
 				TableViewColumn {
 					role: "baseName"
@@ -518,8 +539,8 @@ ApplicationWindow {
 					onClicked: {
 						keyMetaColumn.state = ""
 						searchResultsSelectedItem = null
-						searchResultsListView.model.discardModel()
-						searchResultsListView.model = null
+						searchResultsView.model.discardModel()
+						searchResultsView.model = null
 					}
 				}
 
