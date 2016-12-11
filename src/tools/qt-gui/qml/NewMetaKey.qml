@@ -1,7 +1,7 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.5
+import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
-import QtQuick.Controls.Styles 1.1
+import QtQuick.Controls.Styles 1.4
 import "HelperFunctions.js" as Helper
 
 Item {
@@ -55,7 +55,7 @@ Item {
 			implicitHeight: metaNameField.height + defaultSpacing
 			implicitWidth: implicitHeight
 			iconSource: "icons/edit-delete.png"
-			iconName: Helper.userIcon(user-trash)
+			iconName: Helper.useIcon(user-trash)
 
 			onClicked: {
 				qmlMetaKeyModel.remove(index)// remove the visual item

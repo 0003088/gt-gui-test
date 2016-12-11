@@ -1,16 +1,16 @@
-import QtQuick 2.2
+import QtQuick 2.5
 
 KeyWindow {
 
 	title: qsTr("Edit Key")
 
-    keyName: (selectedNode === null || selectedNode.name === undefined) ? "" : selectedNode.name
-	keyValue: (selectedNode === null || selectedNode.value === undefined) ? "" : selectedNode.value
+	keyName: (selectedNode === null || treeModel.data(selectedNode,257) === undefined) ? "" : treeModel.data(selectedNode,257)
+	keyValue: (selectedNode === null || treeModel.data(selectedNode,259) === undefined) ? "" : treeModel.data(selectedNode,259)
 
 	function populateMetaArea() {
-		if (selectedNode.metaValue){
-			for (var i = 0; i < selectedNode.metaValue.rowCount(); i++){
-				qmlMetaKeyModel.append({"metaName" : selectedNode.metaValue.get(i).name, "metaValue" : selectedNode.metaValue.get(i).value})
+		if (treeModel.data(selectedNode,266)){
+			for (var i = 0; i < treeModel.data(selectedNode,266).rowCount(); i++){
+				qmlMetaKeyModel.append({"metaName" : treeModel.data(selectedNode,266).get(i).metaName, "metaValue" : treeModel.data(selectedNode,266).get(i).metaValue})
 			}
 		}
 	}
@@ -18,19 +18,19 @@ KeyWindow {
 	function editAccepted() {
 
 		var metaData = {}
-		var index
+		var index = selectedNode
 
-		if (accessFromSearchResults)
-			index = selectedNode.parentModel.getIndexByName(selectedNode.name)
-		else
-			index = selectedNode.index
+//		if (accessFromSearchResults)
+//			index = selectedNode.parentModel.getIndexByName(selectedNode.name)
+//		else
+//			index = selectedNode.index
 
 		//collect metadata in a map
 		for (var i = 0; i < qmlMetaKeyModel.count; i++){
 			metaData[qmlMetaKeyModel.get(i).metaName] = qmlMetaKeyModel.get(i).metaValue
 		}
 
-		//create undo command
+//		//create undo command
 		if (isEdited){
 			container.clearData()
 
@@ -42,17 +42,17 @@ KeyWindow {
 			container.setNewValue(valueTextField.text)
 			container.setNewMetadata(metaData)
 
-			undoManager.createEditKeyCommand(selectedNode.parentModel, index, container)
+			undoManager.createEditKeyCommand(treeModel, index, container)
 		}
 
 		if (!error){
 			qmlMetaKeyModel.clear()
 			selectedNode = null
 
-			if (accessFromSearchResults){
-				searchResultsListView.model.refresh()
-				searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
-			}
+//			if (accessFromSearchResults){
+//				searchResultsListView.model.refresh()
+//				searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
+//			}
 
 			visible = false
 			accessFromSearchResults = false
@@ -61,9 +61,9 @@ KeyWindow {
 
 			qmlMetaKeyModel.clear()
 
-//			if (keyAreaView.model !== null && !accessFromSearchResults){
-//				keyAreaSelectedItem = keyAreaView.model.get(keyAreaView.currentRow)
-//			}
+////			if (keyAreaView.model !== null && !accessFromSearchResults){
+////				keyAreaSelectedItem = keyAreaView.model.get(keyAreaView.currentRow)
+////			}
 		}
 	}
 }

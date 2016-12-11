@@ -18,7 +18,7 @@ BasicWindow {
 	property string valuePlaceHolder: "Meta Key Value ..."
 	property int    modelIndex: 0
 	property bool   isArray: false
-	property string path: !visible || selectedNode === null ? "" : selectedNode.path.lastIndexOf("/") === -1 ? selectedNode.path : selectedNode.path.slice(0, selectedNode.path.lastIndexOf("/"))
+	property string path: !visible || selectedNode === null ? "NULL" : treeModel.data(selectedNode,258).lastIndexOf("/") === -1 ? treeModel.data(selectedNode,257) : treeModel.data(selectedNode,258).slice(0, treeModel.data(selectedNode,258).lastIndexOf("/"))
 	property string keyName: ""
 	property string keyValue: ""
 	property bool   isEdited: false

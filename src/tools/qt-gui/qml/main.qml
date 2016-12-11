@@ -401,12 +401,10 @@ ApplicationWindow {
 					}
 					else if(event.key === Qt.Key_Space){
 						if (treeView.isExpanded(currentIndex)){
-							console.debug("expanded") + " " + console.debug(currentIndex)
 							collapse(currentIndex)
 							event.accepted = true
 						}
 						else {
-							console.debug("collapsed") + " " + console.debug(currentIndex)
 							expand(currentIndex)
 							event.accepted = true
 						}
@@ -447,6 +445,13 @@ ApplicationWindow {
 					selection: ItemSelectionModel {
 						id: keyViewSelection
 						model: onlyLeavesProxyModel
+					}
+
+					Keys.onPressed: {
+						if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)){
+							guiActions.editAction.trigger()
+							event.accepted = true
+						}
 					}
 
 					TableViewColumn {
@@ -562,6 +567,8 @@ ApplicationWindow {
 					selection: ItemSelectionModel {
 						model:searchResultsView.model
 					}
+
+					onSelectionChanged: console.debug(currentIndex)
 
 					TableViewColumn {
 						id: searchResultsColum

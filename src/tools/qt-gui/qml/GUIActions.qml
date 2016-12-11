@@ -314,13 +314,13 @@ Item {
 
 		onTriggered: {
 			if(searchResultsView.activeFocus){
-				editKeyWindow.selectedNode = searchResultsView.currentIndex
+	//			editKeyWindow.selectedNode = noLeavesProxyModel.mapSelectionToSource(
 			}
 			else if(tableView.activeFocus) {
 				editKeyWindow.selectedNode = onlyLeavesProxyModel.mapToSource(tableView.currentIndex)
 			}
 			else if(treeView.activeFocus) {
-				editKeyWindow.selectedNode = noLeavesProxyModel.mapToSource(treeView.currentIndex)
+				editKeyWindow.selectedNode = noLeavesProxyModel.mapToSource(treeView.currentIndex);
 			}
 
 			editKeyWindow.populateMetaArea()
