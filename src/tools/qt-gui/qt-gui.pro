@@ -2,7 +2,7 @@ QT += quick  gui core  qml  widgets testlib dbus
 
 HEADERS +=	$$files(src/*.hpp)\
 $$files(src/markdownconverter/*.h, true)\
-$$files(modeltest/*.h)
+$$files(modeltest/*.h) \
 
 SOURCES +=	$$files(src/*.cpp,true) \
 $$files(modeltest/*.cpp) \

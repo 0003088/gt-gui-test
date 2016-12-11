@@ -141,5 +141,7 @@
         <file>unittest/treeviewtest.cpp</file>
         <file>unittest/treeviewtest.hpp</file>
         <file>unittest/unittest.pro</file>
+        <file>src/searchresultsmodel.cpp</file>
+        <file>src/searchresultsmodel.hpp</file>
     </qresource>
 </RCC>

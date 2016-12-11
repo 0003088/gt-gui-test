@@ -148,19 +148,18 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 
 QVariant TreeModel::find(const QString &term)
 {
-	//	auto searchResults = new TreeViewModel;
-	//	FindVisitor fVisit (searchResults, term);
-	//	accept (fVisit);
+	auto searchResults = new SearchResultsModel;
+	FindVisitor fVisit (searchResults, term);
+	m_rootItem->accept (fVisit);
 
-	//	if (searchResults->rowCount () == 0)
-	//	{
-	//		searchResults->model ().append (
-	//		ConfigNodePtr (new ConfigNode ("NotfoundNode", tr ("There were no results matching your query."), nullptr, this)));
-	//	}
+	if (searchResults->rowCount () == 0)
+	{
+		searchResults->appendRow(TreeItemPtr (new TreeItem ("NotfoundNode", tr ("There were no results matching your query."), nullptr, TreeItemPtr(NULL))));
+	}
 
-	//	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
+	QQmlEngine::setObjectOwnership (searchResults, QQmlApplicationEngine::CppOwnership);
 
-	//	return QVariant::fromValue (searchResults);
+	return QVariant::fromValue (searchResults);
 }
 
 bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -752,7 +751,7 @@ QHash<int, QByteArray> TreeModel::roleNames() const
 	roles[MetaDataRole] = "metaData";//266
 	roles[ItemRole] = "item";
 	roles[HierarchyRole] = "hierarchy";
-	qDebug() << "BaseNameRole" << BaseNameRole;
+//	qDebug() << "BaseNameRole" << BaseNameRole;
 	return roles;
 }
 

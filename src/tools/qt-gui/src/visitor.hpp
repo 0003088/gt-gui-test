@@ -9,8 +9,6 @@
 #ifndef VISITOR_H
 #define VISITOR_H
 
-#include <QSharedPointer>
-
 class TreeItem;
 class TreeModel;
 
@@ -27,13 +25,6 @@ public:
 	 * @param node The visited ConfigNode
 	 */
 	virtual void visit (TreeItem & item) = 0;
-
-	/**
-	 * @brief The abstract method a visitor who wants to visit a TreeViewModel needs to implement.
-	 *
-	 * @param model The visited TreeViewModel
-	 */
-//	virtual void visit (TreeModel * model) = 0;
 };
 
 #endif // VISITOR_H

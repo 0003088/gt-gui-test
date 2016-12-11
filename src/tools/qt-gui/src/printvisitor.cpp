@@ -8,8 +8,8 @@
 
 #include "printvisitor.hpp"
 
-#include "confignode.hpp"
-#include "treeviewmodel.hpp"
+#include "treeitem.hpp"
+#include "treemodel.hpp"
 
 void PrintVisitor::visit (TreeItem &item)
 {
@@ -23,11 +23,3 @@ void PrintVisitor::visit (TreeItem &item)
 
 	std::cout << name.toStdString () << std::endl;
 }
-
-//void PrintVisitor::visit (TreeViewModel * model)
-//{
-//	foreach (ConfigNodePtr node, model->model ())
-//	{
-//		node->accept (*this);
-//	}
-//}

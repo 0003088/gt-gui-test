@@ -113,13 +113,13 @@ ToolBar {
 			focus: true
 			onAccepted: {
 				if (text !== ""){
-					if (searchResultsListView.model !== null) {
-						searchResultsListView.model.discardModel()
-						searchResultsListView.model = null
+					if (searchResultsView.model !== null) {
+						searchResultsView.model.discardModel()
+						searchResultsView.model = null
 					}
-					searchResultsListView.model = treeView.treeModel.find(text)
-					searchResultsListView.currentIndex = -1
-					searchResultsListView.forceActiveFocus()
+					searchResultsView.model = treeModel.find(text)
+//					searchResultsView.currentIndex = -1
+					searchResultsView.forceActiveFocus()
 					searchResultsColorAnimation.running = true
 				}
 			}

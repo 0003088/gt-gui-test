@@ -21,12 +21,12 @@ ApplicationWindow {
 	title: "Elektra Qt Editor (%1)".arg(mode)
 
 	onClosing: {
-//		if (!undoManager.isClean()){
-//			close.accepted = false
-//			exitDialog.open()
-//		}
-//		else
-			Qt.quit()
+		//		if (!undoManager.isClean()){
+		//			close.accepted = false
+		//			exitDialog.open()
+		//		}
+		//		else
+		Qt.quit()
 	}
 
 	//**Properties*********************************************************************************************//
@@ -63,9 +63,9 @@ ApplicationWindow {
 		onShowMessage: {
 			ErrorDialog.showMessage(title, text, detailedText)
 		}
-//		onUpdateIndicator: {
-//			treeView.updateIndicator()
-//		}
+		//		onUpdateIndicator: {
+		//			treeView.updateIndicator()
+		//		}
 		onInvalidateFilter: {
 			treeView.updateIndicator()
 			treeViewSelection.reset()
@@ -97,27 +97,27 @@ ApplicationWindow {
 		}
 	}
 
-//	Connections {
-//		target: treeView.currentNode === null ? null : treeView.currentNode.parentModel
+	//	Connections {
+	//		target: treeView.currentNode === null ? null : treeView.currentNode.parentModel
 
-//		onShowMessage: {
-//			ErrorDialog.showMessage(title, text, detailedText)
-//		}
-//		onUpdateIndicator: {
-//			treeView.updateIndicator()
-//		}
-//	}
+	//		onShowMessage: {
+	//			ErrorDialog.showMessage(title, text, detailedText)
+	//		}
+	//		onUpdateIndicator: {
+	//			treeView.updateIndicator()
+	//		}
+	//	}
 
-//	Connections {
-//		target: treeView.currentNode === null ? null : treeView.currentNode.children
+	//	Connections {
+	//		target: treeView.currentNode === null ? null : treeView.currentNode.children
 
-//		onShowMessage: {
-//			ErrorDialog.showMessage(title, text, detailedText)
-//		}
-//		onUpdateIndicator: {
-//			treeView.updateIndicator()
-//		}
-//	}
+	//		onShowMessage: {
+	//			ErrorDialog.showMessage(title, text, detailedText)
+	//		}
+	//		onUpdateIndicator: {
+	//			treeView.updateIndicator()
+	//		}
+	//	}
 
 	//**Colors*************************************************************************************************//
 
@@ -294,7 +294,7 @@ ApplicationWindow {
 				anchors.fill: parent
 				anchors.leftMargin: defaultMargins
 				onSelectionChanged: text = !treeViewSelection.hasSelection ? "" : treeModel.data(noLeavesProxyModel.mapToSource(treeViewSelection.currentIndex), 258) +
-														 (!keyViewSelection.hasSelection ? "" :  "/" + treeModel.data(onlyLeavesProxyModel.mapToSource(keyViewSelection.currentIndex), 257))
+																			 (!keyViewSelection.hasSelection ? "" :  "/" + treeModel.data(onlyLeavesProxyModel.mapToSource(keyViewSelection.currentIndex), 257))
 			}
 		}
 	}
@@ -495,7 +495,7 @@ ApplicationWindow {
 					ColorAnimation {
 						target: searchResultsArea
 						property: "border.color"
-						to: (searchResultsArea.visible &&  searchResultsListView.model !== null) ? (searchResultsListView.model.get(0).name === "NotfoundNode" ? "red" : "green") : activePalette.dark
+						to: (searchResultsArea.visible &&  searchResultsView.model !== null) ? (searchResultsView.model.get(0).name === "NotfoundNode" ? "red" : "green") : activePalette.dark
 						duration: 0
 					}
 					ColorAnimation {
@@ -523,87 +523,88 @@ ApplicationWindow {
 					}
 				}
 
-				ScrollView {
-					id: searchResultsScrollView
+
+				TreeView {
+					id: searchResultsView
 
 					anchors.fill: parent
 					anchors.margins: defaultMargins
-					anchors.rightMargin: searchResultsCloseButton.width
+					anchors.rightMargin: searchResultsCloseButton.width+4
+					//						clip: true
+					model: null
 
-					TreeView {
-						id: searchResultsView
+					headerVisible: false
+					frameVisible: false
+					alternatingRowColors: false
+					backgroundVisible: false
 
-						anchors.fill: parent
-						clip: true
-						//						highlightMoveDuration: 0
-						//						highlightResizeDuration: 0
-						//						keyNavigationWraps: true
-						model: null
+					selection: ItemSelectionModel {
+						model:searchResultsView.model
+					}
 
-						selection: ItemSelectionModel {
+					TableViewColumn {
+						id: searchResultsColum
 
-						}
+						role:"name"
+						width: Math.ceil(searchResultsArea.width*0.5 - defaultSpacing*0.5)
 
-						TableViewColumn {
-							id: searchResultsColumn
-						}
 
-						//						Keys.onPressed: {
-						//							if(event.key === Qt.Key_Up && searchResultsListView.currentIndex > 0){
-						//								currentIndex--
-						//								searchResultsSelectedItem = model.get(currentIndex)
+						//							Keys.onPressed: {
+						//								if(event.key === Qt.Key_Up && searchResultsListView.currentIndex > 0){
+						//									currentIndex--
+						//									searchResultsSelectedItem = model.get(currentIndex)
+						//								}
+						//								else if(event.key === Qt.Key_Down && searchResultsListView.currentIndex < model.rowCount() - 1){
+						//									currentIndex++
+						//									searchResultsSelectedItem = model.get(currentIndex)
+						//								}
+						//								else if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && searchResultsSelectedItem !== null){
+						//									editKeyWindow.selectedNode = searchResultsSelectedItem
+						//									editKeyWindow.accessFromSearchResults = true
+						//									editAction.trigger()
+						//								}
 						//							}
-						//							else if(event.key === Qt.Key_Down && searchResultsListView.currentIndex < model.rowCount() - 1){
-						//								currentIndex++
-						//								searchResultsSelectedItem = model.get(currentIndex)
+
+						//							highlight: Rectangle {
+						//								id: highlightBar
+						//								color: guiSettings.highlightColor
 						//							}
-						//							else if((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && searchResultsSelectedItem !== null){
-						//								editKeyWindow.selectedNode = searchResultsSelectedItem
-						//								editKeyWindow.accessFromSearchResults = true
-						//								editAction.trigger()
-						//							}
-						//						}
 
-						//						highlight: Rectangle {
-						//							id: highlightBar
-						//							color: guiSettings.highlightColor
-						//						}
+						//							delegate: Text {
+						//								color: guiSettings.nodeWithKeyColor
+						//								text: "name"
 
-						//						delegate: Text {
-						//							color: guiSettings.nodeWithKeyColor
-						//							text: path
+						//								MouseArea {
+						//									anchors.fill: parent
+						//									acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-						//							MouseArea {
-						//								anchors.fill: parent
-						//								acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-						//								onClicked: {
-						//									if(searchResultsListView.model.get(0).name !== "NotfoundNode"){
-						//										if(mouse.button === Qt.LeftButton){
-						//											searchResultsListView.currentIndex = index
-						//											searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
-						//											forceActiveFocus()
+						//									onClicked: {
+						//										if(searchResultsListView.model.get(0).name !== "NotfoundNode"){
+						//											if(mouse.button === Qt.LeftButton){
+						//												searchResultsListView.currentIndex = index
+						//												searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
+						//												forceActiveFocus()
+						//											}
+						//											else if(mouse.button === Qt.RightButton) {
+						//												searchResultsListView.currentIndex = index
+						//												searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
+						//												forceActiveFocus()
+						//												editKeyWindow.accessFromSearchResults = true
+						//												searchResultsContextMenu.popup()
+						//											}
 						//										}
-						//										else if(mouse.button === Qt.RightButton) {
+						//									}
+						//									onDoubleClicked: {
+						//										if(searchResultsListView.model.get(0).name !== "NotfoundNode"){
 						//											searchResultsListView.currentIndex = index
-						//											searchResultsSelectedItem = searchResultsListView.model.get(searchResultsListView.currentIndex)
 						//											forceActiveFocus()
 						//											editKeyWindow.accessFromSearchResults = true
-						//											searchResultsContextMenu.popup()
+						//											editKeyWindow.selectedNode = searchResultsListView.model.get(searchResultsListView.currentIndex)
+						//											editAction.trigger()
 						//										}
 						//									}
 						//								}
-						//								onDoubleClicked: {
-						//									if(searchResultsListView.model.get(0).name !== "NotfoundNode"){
-						//										searchResultsListView.currentIndex = index
-						//										forceActiveFocus()
-						//										editKeyWindow.accessFromSearchResults = true
-						//										editKeyWindow.selectedNode = searchResultsListView.model.get(searchResultsListView.currentIndex)
-						//										editAction.trigger()
-						//									}
-						//								}
 						//							}
-						//						}
 					}
 				}
 			}

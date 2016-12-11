@@ -9,8 +9,11 @@
 #ifndef FINDVISITOR_HPP
 #define FINDVISITOR_HPP
 
-#include "treeitem.hpp"
 #include "visitor.hpp"
+#include "searchresultsmodel.hpp"
+#include <QString>
+
+class TreeItem;
 
 /**
  * @brief The FindVisitor class. It performs the search for a term and includes all ConfigNodes that contain the search
@@ -25,12 +28,12 @@ public:
 	 * is completed.
 	 * @param term The search term to look for.
 	 */
-	explicit FindVisitor (TreeModel * searchResults, QString term);
+	explicit FindVisitor (SearchResultsModel *searchResults, QString term);
 
 	void visit (TreeItem & item) override;
 
 private:
-	TreeModel * m_searchResults;
+	SearchResultsModel * m_searchResults;
 	QString m_term;
 };
 
