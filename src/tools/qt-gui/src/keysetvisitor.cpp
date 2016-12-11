@@ -7,7 +7,7 @@
  */
 
 #include "keysetvisitor.hpp"
-#include "treemodel.hpp"
+#include "treeitem.hpp"
 
 using namespace kdb;
 

@@ -9,7 +9,7 @@
 #ifndef FINDVISITOR_HPP
 #define FINDVISITOR_HPP
 
-#include "confignode.hpp"
+#include "treeitem.hpp"
 #include "visitor.hpp"
 
 /**
@@ -25,12 +25,12 @@ public:
 	 * is completed.
 	 * @param term The search term to look for.
 	 */
-	explicit FindVisitor (TreeViewModel * searchResults, QString term);
+	explicit FindVisitor (TreeModel * searchResults, QString term);
 
 	void visit (TreeItem & item) override;
 
 private:
-	TreeViewModel * m_searchResults;
+	TreeModel * m_searchResults;
 	QString m_term;
 };
 

@@ -19,7 +19,6 @@
 
 typedef QPair<int, int> PathItem;
 typedef QList<PathItem> Path;
-typedef QSharedPointer<TreeItem> TreeItemPtr;
 
 class TreeModel : public QAbstractItemModel
 {

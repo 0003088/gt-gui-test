@@ -9,7 +9,6 @@
 #ifndef KEYSETVISITOR_HPP
 #define KEYSETVISITOR_HPP
 
-#include "treemodel.hpp"
 #include "visitor.hpp"
 #include <kdb.hpp>
 

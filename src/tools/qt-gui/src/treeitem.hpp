@@ -82,4 +82,8 @@ private:
 	int									getRowByName() const;
 };
 
+Q_DECLARE_METATYPE(TreeItem)
+
+typedef QSharedPointer<TreeItem> TreeItemPtr;
+
 #endif // TREEITEM_HPP
