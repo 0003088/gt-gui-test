@@ -13,6 +13,13 @@ void OnlyLeavesProxyModel::invalidateFilter()
 	QSortFilterProxyModel::invalidateFilter();
 }
 
+void OnlyLeavesProxyModel::textFilterChanged(const QString &text)
+{
+	QRegExp regex(text,Qt::CaseInsensitive);
+
+	setFilterRegExp(regex);
+}
+
 bool OnlyLeavesProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
 	if(!source_parent.isValid())
@@ -22,9 +29,7 @@ bool OnlyLeavesProxyModel::filterAcceptsRow(int source_row, const QModelIndex &s
 
 	if(index.isValid())
 	{
-		if((sourceModel()->data(index, TreeModel::ChildrenAreLeavesRole).toBool()))
-			return true;
+		return sourceModel()->data(index, TreeModel::ChildrenAreLeavesRole).toBool()
+		&& sourceModel()->data(index, TreeModel::BaseNameRole).toString().contains(filterRegExp());
 	}
-
-	return false;
 }

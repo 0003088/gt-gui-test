@@ -141,6 +141,9 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 	case HierarchyRole:
 		return QVariant::fromValue(item->name().count("/"));
 
+	case SiblingHasChildrenRole:
+		return QVariant::fromValue(item->siblingHasChildren());
+
 	default:
 		return QVariant::fromValue(item);
 	}
@@ -751,6 +754,7 @@ QHash<int, QByteArray> TreeModel::roleNames() const
 	roles[MetaDataRole] = "metaData";//266
 	roles[ItemRole] = "item";
 	roles[HierarchyRole] = "hierarchy";
+	roles[SiblingHasChildrenRole] = "siblingHasChildren";
 //	qDebug() << "BaseNameRole" << BaseNameRole;
 	return roles;
 }

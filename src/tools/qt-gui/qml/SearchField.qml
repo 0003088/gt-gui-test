@@ -12,6 +12,11 @@ TextField {
 			keyMetaColumn.state = "SHOW_SEARCH_RESULTS"
 	}
 
+	onTextChanged: {
+		noLeavesProxyModel.textFilterChanged(text)
+		onlyLeavesProxyModel.textFilterChanged(text)
+	}
+
 	Image {
 		id: clear
 		anchors {

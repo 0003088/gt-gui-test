@@ -15,6 +15,7 @@ public:
 
 public slots:
 	void invalidateFilter();
+	void textFilterChanged(const QString &text);
 };
 
 #endif // ONLYLEAVESPROXYMODEL_HPP

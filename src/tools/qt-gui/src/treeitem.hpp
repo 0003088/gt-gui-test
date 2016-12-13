@@ -60,6 +60,7 @@ public:
 	bool								insertChild(int index, QSharedPointer<TreeItem> item);
 	bool								insertChildren(int index, QList<QSharedPointer<TreeItem> > items);
 	bool								removeChildren(int row, int count);
+	bool 								siblingHasChildren() const;
 
 	QList<QSharedPointer<TreeItem> >	children() const;
 

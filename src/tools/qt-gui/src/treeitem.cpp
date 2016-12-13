@@ -420,3 +420,14 @@ bool TreeItem::removeChildren(int row, int count)
 
 	return true;
 }
+
+bool TreeItem::siblingHasChildren() const
+{
+	foreach (TreeItemPtr item, parent()->children())
+	{
+		if(item->name() != name() && item->childCount() > 0)
+			return true;
+	}
+
+	return false;
+}

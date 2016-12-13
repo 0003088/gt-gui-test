@@ -39,7 +39,8 @@ public:
 		IsNullRole,
 		MetaDataRole,
 		ItemRole,
-		HierarchyRole
+		HierarchyRole,
+		SiblingHasChildrenRole
 	};
 
 	explicit TreeModel (QObject * parentModel = nullptr);
