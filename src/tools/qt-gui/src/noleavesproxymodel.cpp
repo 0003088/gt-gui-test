@@ -27,12 +27,20 @@ bool NoLeavesProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sou
 
 	QModelIndex index = sourceModel()->index(source_row, filterKeyColumn(), source_parent);
 
-	if(index.isValid())
+       	if(index.isValid())
 	{
-		return !(sourceModel()->data(index, TreeModel::ChildCountRole) == 0
+		bool accept = !(sourceModel()->data(index, TreeModel::ChildCountRole) == 0
 		&& !sourceModel()->data(index, TreeModel::SiblingHasChildrenRole).toBool()
 		&& sourceModel()->data(index, TreeModel::HierarchyRole) > 1)
 		&& (sourceModel()->data(index, TreeModel::BaseNameRole).toString().contains(filterRegExp())
 		||	sourceModel()->data(index, TreeModel::ValueRole).toString().contains(filterRegExp()));
-	}
+
+	        if (sourceModel()->hasChildren(index)
+                {
+                    for (int i = 0; i < sourceModel()->rowCount(index); i++)
+                    {
+                        accept = accept || filterAcceptsRow(i,index);
+                    }
+                }
+        }
 }
