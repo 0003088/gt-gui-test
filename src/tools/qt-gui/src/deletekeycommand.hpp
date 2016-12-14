@@ -37,7 +37,7 @@ private:
 	TreeItemPtr				m_item;
 	TreeItemPtr				m_root;
 	int 					m_row;
-	Path					m_index;
+	Path					m_path;
 	bool					m_isRoot;
 };
 

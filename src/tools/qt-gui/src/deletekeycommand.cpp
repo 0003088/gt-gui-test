@@ -12,7 +12,7 @@ DeleteKeyCommand::DeleteKeyCommand (TreeModel* model, const QModelIndex &index, 
 : QUndoCommand(parent)
 , m_model(model)
 , m_item(qvariant_cast<TreeItemPtr>(model->data(index, TreeModel::ItemRole)))
-, m_index(m_model->pathFromIndex(index.parent()))
+, m_path(m_model->pathFromIndex(index.parent()))
 , m_isRoot(false)
 , m_row(index.row())
 {
@@ -29,7 +29,7 @@ DeleteKeyCommand::DeleteKeyCommand (TreeModel* model, const QModelIndex &index, 
 
 void DeleteKeyCommand::undo ()
 {
-	QModelIndex index = m_model->pathToIndex(m_index);
+	QModelIndex index = m_model->pathToIndex(m_path);
 
 	if (index.isValid())
 	{
@@ -49,7 +49,7 @@ void DeleteKeyCommand::undo ()
 
 void DeleteKeyCommand::redo ()
 {
-	QModelIndex index = m_model->pathToIndex(m_index);
+	QModelIndex index = m_model->pathToIndex(m_path);
 
 	if (index.isValid())
 	{

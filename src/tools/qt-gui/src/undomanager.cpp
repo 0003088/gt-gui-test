@@ -47,9 +47,9 @@ void UndoManager::createDeleteKeyCommand (TreeModel* model, const QModelIndex &i
 		m_undoStack->push(new DeleteKeyCommand(model, index));
 }
 
-void UndoManager::createNewKeyCommand (const QModelIndex &index, DataContainer* data, bool isBelow)
+void UndoManager::createNewKeyCommand (TreeModel* model, const QModelIndex &index, DataContainer* data, bool isBelow)
 {
-//	m_undoStack->push (new NewKeyCommand (model, idx, data, isBelow));
+	m_undoStack->push (new NewKeyCommand (model, index, data, isBelow));
 }
 
 void UndoManager::createCopyKeyCommand (const QModelIndex &index)

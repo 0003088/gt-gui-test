@@ -9,19 +9,24 @@
 #include "newkeycommand.hpp"
 #include <kdb.hpp>
 
-NewKeyCommand::NewKeyCommand (TreeViewModel * model, int index, DataContainer * data, bool isBelow, QUndoCommand * parent)
-: QUndoCommand (parent), m_parentNode (model->model ().at (index)), m_newNode (nullptr), m_value (data->newValue ()),
-  m_metaData (data->newMetadata ())
+NewKeyCommand::NewKeyCommand (TreeModel *model, const QModelIndex &parent, DataContainer * data, bool isBelow, QUndoCommand * parentCommand)
+: QUndoCommand (parentCommand)
+, m_model(model)
+, m_parentNode (qvariant_cast<TreeItemPtr>(model->data(parent, TreeModel::ItemRole)))
+, m_newNode (nullptr)
+, m_path(model->pathFromIndex(parent))
 {
-	TreeViewModel * parentModel = m_parentNode->getChildren ();
-	kdb::Key newKey = parentModel->createNewKey (m_parentNode->getPath () + "/" + data->newName (), m_value, m_metaData);
+//	TreeViewModel * parentModel = m_parentNode->getChildren ();
+	Q_ASSERT(m_model == parent.model());
 
-	QStringList newNameSplit = parentModel->getSplittedKeyname (newKey);
-	kdb::Key parentKey = m_parentNode->getKey ();
+	kdb::Key newKey = m_model->createNewKey (m_parentNode->name() + "/" + data->newName (), data->newValue (), data->newMetadata ());
 
-	if (!parentKey) parentKey = kdb::Key (m_parentNode->getPath ().toStdString (), KEY_END);
+	QStringList newNameSplit = m_model->getSplittedKeyname (newKey);
+	kdb::Key parentKey = m_parentNode->key();
 
-	QStringList parentNameSplit = parentModel->getSplittedKeyname (parentKey);
+	if (!parentKey) parentKey = kdb::Key (m_parentNode->name ().toStdString (), KEY_END);
+
+	QStringList parentNameSplit = m_model->getSplittedKeyname (parentKey);
 
 	// check if the new key is directly below the parent
 	QSet<QString> diff = newNameSplit.toSet ().subtract (parentNameSplit.toSet ());
@@ -31,24 +36,61 @@ NewKeyCommand::NewKeyCommand (TreeViewModel * model, int index, DataContainer * 
 	else
 		setText ("newKey");
 
-	m_name = cutListAtIndex (newNameSplit, parentNameSplit.count ()).first ();
+	QString name = cutListAtIndex (newNameSplit, parentNameSplit.count ()).first ();
 
-	parentModel->sink (m_parentNode, newNameSplit, newKey.dup ());
+	m_model->sink(m_parentNode, newNameSplit, newKey.dup ());
 
-	m_newNode = m_parentNode->getChildByName (m_name);
-	parentModel->removeRow (m_parentNode->getChildIndexByName (m_name));
+	m_newNode = m_parentNode->getChildByName (name);
+
+	QModelIndexList newIndex = m_model->match(parent, TreeModel::NameRole,
+	QVariant::fromValue(QString::fromStdString(newKey.getFullName())),1,Qt::MatchExactly | Qt::MatchRecursive);
+
+	Q_ASSERT(newIndex.count() == 1);
+
+	model->removeRow(newIndex.at(0).row(),newIndex.at(0).parent());//TODO
+
+//	parentModel->removeRow (m_parentNode->getChildIndexByName (m_name));
 }
 
 void NewKeyCommand::undo ()
 {
 	// remove new node
-	m_parentNode->getChildren ()->removeRow (m_parentNode->getChildIndexByName (m_name));
+//	m_parentNode->getChildren ()->removeRow (m_parentNode->getChildIndexByName (m_name));
+
+	QModelIndex index = m_model->pathToIndex(m_path);
+
+	if (index.isValid())
+	{
+		QList<TreeItemPtr> items;
+		Q_ASSERT(m_newNode);
+		items.append(m_newNode);
+		m_model->setItemsToInsert(items);
+
+		m_model->insertRows(index.row(), items.count(), index);
+	//		//	m_model->refreshArrayNumbers();
+	//		//	m_model->refresh();
+	}
+
 }
 
 void NewKeyCommand::redo ()
 {
 	// insert new node
-	m_parentNode->getChildren ()->append (m_newNode);
+	//m_parentNode->getChildren ()->append (m_newNode);
+
+	QModelIndex index = m_model->pathToIndex(m_path);
+
+	if (index.isValid())
+	{
+		QList<TreeItemPtr> items;
+		Q_ASSERT(m_newNode);
+		items.append(m_newNode);
+		m_model->setItemsToInsert(items);
+
+		m_model->insertRows(index.row(), items.count(), index);
+	//		//	m_model->refreshArrayNumbers();
+	//		//	m_model->refresh();
+	}
 }
 
 QStringList NewKeyCommand::cutListAtIndex (QStringList & list, int index)
@@ -58,3 +100,20 @@ QStringList NewKeyCommand::cutListAtIndex (QStringList & list, int index)
 
 	return list;
 }
+
+//	QModelIndex index = m_model->pathToIndex(m_index);
+
+//	if (index.isValid())
+//	{
+////		if(m_isRoot)
+////			m_model->removeRow(index.row(), index);
+
+//		QList<TreeItemPtr> items;
+//		Q_ASSERT(m_item);
+//		items.append(m_item);
+//		m_model->setItemsToInsert(items);
+
+//		m_model->insertRows(m_row, items.count(), index);
+//		//	m_model->refreshArrayNumbers();
+//		//	m_model->refresh();
+//	}

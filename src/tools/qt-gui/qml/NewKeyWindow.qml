@@ -5,7 +5,7 @@ KeyWindow {
 
 	title: qsTr("Create new Key")
 
-	path: selectedNode === null ? "" : selectedNode.path
+	path: (selectedNode === null || treeModel.data(selectedNode,257) === undefined) ? "" : treeModel.data(selectedNode,257)
 
 	property bool isBelow: false
 
@@ -23,7 +23,7 @@ KeyWindow {
 		container.setNewMetadata(metaData)
 
 		//create UndoCommand
-		undoManager.createNewKeyCommand(selectedNode.parentModel, selectedNode.index, container, isBelow)
+		undoManager.createNewKeyCommand(treeModel, selectedNode, container, isBelow)
 
 		if (!error){
 			visible = false

@@ -7,10 +7,10 @@ TextField {
 
 	placeholderText: qsTr("Find Key ...")
 
-	onAccepted: {
-		if (searchField.state == "hasText")
-			keyMetaColumn.state = "SHOW_SEARCH_RESULTS"
-	}
+//	onAccepted: {
+//		if (searchField.state == "hasText")
+//			keyMetaColumn.state = "SHOW_SEARCH_RESULTS"
+//	}
 
 	onTextChanged: {
 		noLeavesProxyModel.textFilterChanged(text)

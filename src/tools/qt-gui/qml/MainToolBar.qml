@@ -111,21 +111,24 @@ ToolBar {
 
 			implicitWidth: keyAreaWidth - searchLogo.implicitWidth - defaultMargins
 			focus: true
-			onAccepted: {
-				if (text !== ""){
-					if (searchResultsView.model !== null) {
-						searchResultsView.model.discardModel()
-						searchResultsView.model = null
-					}
-					searchResultsView.model = treeModel.find(text)
-//					searchResultsView.currentIndex = -1
-					searchResultsView.forceActiveFocus()
-					searchResultsColorAnimation.running = true
-				}
-			}
+//			onAccepted: {
+//				if (text !== ""){
+//					if (searchResultsView.model !== null) {
+//						searchResultsView.model.discardModel()
+//						searchResultsView.model = null
+//					}
+//					searchResultsView.model = treeModel.find(text)
+////					searchResultsView.currentIndex = -1
+//					searchResultsView.forceActiveFocus()
+//					searchResultsColorAnimation.running = true
+//				}
+//			}
 			HelpArea {
 				helpText: qsTr("This is the search field. Any searches here\nwill search the entire Key Database for\nmatching keys, values, or metadata.")
 			}
+		}
+		ComboBox {
+			model: [ "Exact Match","RegExpr" ]
 		}
 	}
 }

@@ -10,7 +10,7 @@
 #define NEWKEYCOMMAND_HPP
 
 #include "datacontainer.hpp"
-#include "treeviewmodel.hpp"
+#include "treemodel.hpp"
 #include <QUndoCommand>
 
 /**
@@ -29,17 +29,19 @@ public:
 	 * @param isBelow Is set when a ConfigNode should be below another ConfigNode. Will trigger an update of the treeview.
 	 * @param parent An optional parent.
 	 */
-	explicit NewKeyCommand (TreeViewModel * model, int index, DataContainer * data, bool isBelow, QUndoCommand * parent = nullptr);
+	explicit NewKeyCommand (TreeModel * model, const QModelIndex &parent, DataContainer * data, bool isBelow, QUndoCommand * parentCommand = nullptr);
 
 	virtual void undo () override;
 	virtual void redo () override;
 
 private:
-	ConfigNodePtr m_parentNode;
-	ConfigNodePtr m_newNode;
-	QString m_name;
-	QString m_value;
-	QVariantMap m_metaData;
+	TreeModel	*m_model;
+	TreeItemPtr	m_parentNode;
+	TreeItemPtr	m_newNode;
+//	QString		m_name;
+//	QString		m_value;
+//	QVariantMap	m_metaData;
+	Path		m_path;
 
 	/**
 	 * @brief cutListAtIndex Helper method that cuts a QStringList at an index and returns the rest of the list.

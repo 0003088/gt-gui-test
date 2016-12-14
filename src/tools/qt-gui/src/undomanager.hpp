@@ -122,7 +122,7 @@ public:
 	 * @param data This container holds the data needed to undo and redo the edit.
 	 * @param isBelow Determines if the new key is a treebranch that requires the treeview to update.
 	 */
-	Q_INVOKABLE void createNewKeyCommand (const QModelIndex &index, DataContainer* data, bool isBelow);
+	Q_INVOKABLE void createNewKeyCommand (TreeModel* model, const QModelIndex &index, DataContainer* data, bool isBelow);
 
 	/**
 	 * @brief Copy a ConfigNode into a different TreeViewModel.

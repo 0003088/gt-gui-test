@@ -88,6 +88,8 @@ public:
 
 	kdb::KeySet				collectCurrentKeySet ();
 
+	kdb::Key				createNewKey(const QString &name, const QString &value, const QVariantMap metaData);
+
 signals:
 	void					invalidateFilter() const;
 	void					showMessage (QString title, QString text, QString detailedText) const;

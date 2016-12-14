@@ -1,5 +1,5 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick 2.7
+import QtQuick.Controls 1.5
 import "MainFunctions.js" as MFunctions
 import "HelperFunctions.js" as Helper
 
@@ -30,45 +30,45 @@ Item {
 	Action {
 		id: newKeyAction
 
-//		text: qsTr("&Key ...")
-//		iconSource: "icons/document-new.png"
-//		iconName: Helper.useIcon("document-new")
-//		tooltip: qsTr("New Key")
-//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+		text: qsTr("&Key ...")
+		iconSource: "icons/document-new.png"
+		iconName: Helper.useIcon("document-new")
+		tooltip: qsTr("New Key")
+		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
 
-//		onTriggered: {
+		onTriggered: {
 
-//			if(source.src === "keyBelow"){
-//				newKeyWindow.selectedNode = keyAreaSelectedItem
-//				newKeyWindow.isBelow = true
-//			}
-//			else
-//				newKeyWindow.selectedNode = treeView.currentNode
+			if(source.src === "keyBelow"){
+				newKeyWindow.selectedNode = onlyLeavesProxyModel.mapToSource(tableView.rootIndex)
+				newKeyWindow.isBelow = true
+			}
+			else
+				newKeyWindow.selectedNode = noLeavesProxyModel.mapToSource(treeView.currentIndex)
 
-//			newKeyWindow.show()
-//		}
+			newKeyWindow.show()
+		}
 	}
 
 	Action {
 		id:newArrayAction
 
-//		text: qsTr("&Array Entry ...")
-//		iconSource: "icons/new-array.png"
-//		iconName: Helper.useIcon("view-grid")
-//		tooltip: qsTr("New Array Entry")
-//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+		//		text: qsTr("&Array Entry ...")
+		//		iconSource: "icons/new-array.png"
+		//		iconName: Helper.useIcon("view-grid")
+		//		tooltip: qsTr("New Array Entry")
+		//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
 
-//		onTriggered: {
+		//		onTriggered: {
 
-//			if(source.src === "arrBelow"){
-//				newArrayWindow.selectedNode = keyAreaSelectedItem
-//				newArrayWindow.isBelow = true
-//			}
-//			else
-//				newArrayWindow.selectedNode = treeView.currentNode
+		//			if(source.src === "arrBelow"){
+		//				newArrayWindow.selectedNode = keyAreaSelectedItem
+		//				newArrayWindow.isBelow = true
+		//			}
+		//			else
+		//				newArrayWindow.selectedNode = treeView.currentNode
 
-//			newArrayWindow.show()
-//		}
+		//			newArrayWindow.show()
+		//		}
 	}
 
 	Action {
@@ -95,26 +95,26 @@ Item {
 	Action {
 		id: importAction
 
-//		text: qsTr("&Import Configuration ... ")
-//		iconSource: "icons/import.png"
-//		iconName: Helper.useIcon("document-import")
-//		tooltip: qsTr("Import Configuration")
-//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
-//		onTriggered: importDialog.show()
+		//		text: qsTr("&Import Configuration ... ")
+		//		iconSource: "icons/import.png"
+		//		iconName: Helper.useIcon("document-import")
+		//		tooltip: qsTr("Import Configuration")
+		//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+		//		onTriggered: importDialog.show()
 	}
 
 	Action {
 		id: exportAction
 
-//		text: qsTr("E&xport Configuration ... ")
-//		iconSource: "icons/export.png"
-//		iconName: Helper.useIcon("document-export")
-//		tooltip: qsTr("Export Configuration")
-//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
-//		onTriggered: {
-//			exportDialog.nameFilters = guiBackend.nameFilters()
-//			exportDialog.open()
-//		}
+		//		text: qsTr("E&xport Configuration ... ")
+		//		iconSource: "icons/export.png"
+		//		iconName: Helper.useIcon("document-export")
+		//		tooltip: qsTr("Export Configuration")
+		//		enabled: treeView.currentItem !== null && !toggleViewerAction.checked
+		//		onTriggered: {
+		//			exportDialog.nameFilters = guiBackend.nameFilters()
+		//			exportDialog.open()
+		//		}
 	}
 
 	Action {
@@ -136,47 +136,47 @@ Item {
 				undoManager.undo()
 				treeViewSelection.updateRoot()
 			}
-//			if(undoManager.undoText === "deleteBranch"){
-//				undoManager.undo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.undoText === "deleteKey"){
-//				undoManager.undo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.undoText === "deleteSearchResultsKey" || undoManager.undoText === "deleteSearchResultsBranch"){
-//				undoManager.undo()
-//				undoManager.undo()
-//			}
-//			else if(undoManager.undoText === "copyBranch"){
-//				undoManager.undo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.undoText === "cutBranch"){
-//				undoManager.undo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.undoText === "import"){
-//				undoManager.undo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.undoText === "newBranch"){
-//				undoManager.undo()
-//				treeView.treeModel.refresh()
-//				keyAreaView.selection.clear()
-//			}
-//			else if(undoManager.undoText === "newKey"){
-//				undoManager.undo()
-//				keyAreaView.selection.clear()
-//				keyAreaView.currentRow = -1
-//			}
-//			else{
-//				undoManager.undo()
-//				if(searchResultsListView.model !== null && searchResultsListView.model !== undefined)
-//					searchResultsListView.model.refresh()
-//			}
+			//			if(undoManager.undoText === "deleteBranch"){
+			//				undoManager.undo()
+			//				treeView.treeModel.refresh()
+			//			}
+			//			else if(undoManager.undoText === "deleteKey"){
+			//				undoManager.undo()
+			//				treeView.treeModel.refresh()
+			//			}
+			//			else if(undoManager.undoText === "deleteSearchResultsKey" || undoManager.undoText === "deleteSearchResultsBranch"){
+			//				undoManager.undo()
+			//				undoManager.undo()
+			//			}
+			//			else if(undoManager.undoText === "copyBranch"){
+			//				undoManager.undo()
+			//				treeView.treeModel.refresh()
+			//			}
+			//			else if(undoManager.undoText === "cutBranch"){
+			//				undoManager.undo()
+			//				treeView.treeModel.refresh()
+			//			}
+			//			else if(undoManager.undoText === "import"){
+			//				undoManager.undo()
+			//				treeView.treeModel.refresh()
+			//			}
+			//			else if(undoManager.undoText === "newBranch"){
+			//				undoManager.undo()
+			//				treeView.treeModel.refresh()
+			//				keyAreaView.selection.clear()
+			//			}
+			//			else if(undoManager.undoText === "newKey"){
+			//				undoManager.undo()
+			//				keyAreaView.selection.clear()
+			//				keyAreaView.currentRow = -1
+			//			}
+			//			else{
+			//				undoManager.undo()
+			//				if(searchResultsListView.model !== null && searchResultsListView.model !== undefined)
+			//					searchResultsListView.model.refresh()
+			//			}
 
-//			treeView.updateIndicator()
+			//			treeView.updateIndicator()
 		}
 
 	}
@@ -184,16 +184,16 @@ Item {
 	Action {
 		id: undoAllAction
 
-//		text: qsTr("Undo All")
-//		tooltip: qsTr("Undo All")
-//		enabled: undoManager.canUndo && !toggleViewerAction.checked
-//		onTriggered: {
-//			//cannot use UndoStack::setIndex() because View-Updates would get lost
-//			for(var i = undoManager.index(); i > undoManager.cleanIndex(); i--)
-//				undoAction.trigger()
+		//		text: qsTr("Undo All")
+		//		tooltip: qsTr("Undo All")
+		//		enabled: undoManager.canUndo && !toggleViewerAction.checked
+		//		onTriggered: {
+		//			//cannot use UndoStack::setIndex() because View-Updates would get lost
+		//			for(var i = undoManager.index(); i > undoManager.cleanIndex(); i--)
+		//				undoAction.trigger()
 
-//			treeView.treeModel.refresh()
-//		}
+		//			treeView.treeModel.refresh()
+		//		}
 	}
 
 	Action {
@@ -208,100 +208,100 @@ Item {
 			undoManager.redo()
 			treeViewSelection.updateRoot()
 		}
-//			if(undoManager.redoText === "deleteBranch"){
-//				undoManager.redo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.redoText === "deleteKey"){
-//				undoManager.redo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.redoText === "deleteSearchResultsKey" || undoManager.redoText === "deleteSearchResultsBranch"){
-//				undoManager.redo()
-//				undoManager.redo()
-//			}
-//			else if(undoManager.redoText === "copyBranch"){
-//				undoManager.redo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.redoText === "cutBranch"){
-//				undoManager.redo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.redoText === "import"){
-//				undoManager.redo()
-//				treeView.treeModel.refresh()
-//			}
-//			else if(undoManager.redoText === "newBranch"){
-//				undoManager.redo()
-//				treeView.treeModel.refresh()
-//			}
-//			else{
-//				undoManager.redo()
-//				if(searchResultsListView.model !== null && searchResultsListView.model !== undefined)
-//					searchResultsListView.model.refresh()
-//			}
-//			treeView.updateIndicator()
+		//			if(undoManager.redoText === "deleteBranch"){
+		//				undoManager.redo()
+		//				treeView.treeModel.refresh()
+		//			}
+		//			else if(undoManager.redoText === "deleteKey"){
+		//				undoManager.redo()
+		//				treeView.treeModel.refresh()
+		//			}
+		//			else if(undoManager.redoText === "deleteSearchResultsKey" || undoManager.redoText === "deleteSearchResultsBranch"){
+		//				undoManager.redo()
+		//				undoManager.redo()
+		//			}
+		//			else if(undoManager.redoText === "copyBranch"){
+		//				undoManager.redo()
+		//				treeView.treeModel.refresh()
+		//			}
+		//			else if(undoManager.redoText === "cutBranch"){
+		//				undoManager.redo()
+		//				treeView.treeModel.refresh()
+		//			}
+		//			else if(undoManager.redoText === "import"){
+		//				undoManager.redo()
+		//				treeView.treeModel.refresh()
+		//			}
+		//			else if(undoManager.redoText === "newBranch"){
+		//				undoManager.redo()
+		//				treeView.treeModel.refresh()
+		//			}
+		//			else{
+		//				undoManager.redo()
+		//				if(searchResultsListView.model !== null && searchResultsListView.model !== undefined)
+		//					searchResultsListView.model.refresh()
+		//			}
+		//			treeView.updateIndicator()
 	}
 
 	Action {
 		id: redoAllAction
 
-//		text: qsTr("Redo All")
-//		tooltip: qsTr("Redo All")
-//		enabled: undoManager.canRedo && !toggleViewerAction.checked
-//		onTriggered: {
-//			//cannot use UndoStack::setIndex() because View-Updates would get lost
-//			for(var i = undoManager.index(); i < undoManager.count(); i++)
-//				redoAction.trigger()
+		//		text: qsTr("Redo All")
+		//		tooltip: qsTr("Redo All")
+		//		enabled: undoManager.canRedo && !toggleViewerAction.checked
+		//		onTriggered: {
+		//			//cannot use UndoStack::setIndex() because View-Updates would get lost
+		//			for(var i = undoManager.index(); i < undoManager.count(); i++)
+		//				redoAction.trigger()
 
-//			treeView.treeModel.refresh()
-//		}
+		//			treeView.treeModel.refresh()
+		//		}
 	}
 
 	Action {
 		id: synchronizeAction
 
-//		text: qsTr("Synchronize")
-//		iconSource: "icons/view-refresh.png"
-//		iconName: Helper.useIcon("view-refresh")
-//		tooltip: qsTr("Synchronize")
-//		shortcut: StandardKey.Refresh
-//		enabled: !toggleViewerAction.checked
-//		onTriggered: {
-//			treeModel.synchronize()
-//			undoManager.setClean()
-////			treeView.treeModel.refresh()
-//		}
+		//		text: qsTr("Synchronize")
+		//		iconSource: "icons/view-refresh.png"
+		//		iconName: Helper.useIcon("view-refresh")
+		//		tooltip: qsTr("Synchronize")
+		//		shortcut: StandardKey.Refresh
+		//		enabled: !toggleViewerAction.checked
+		//		onTriggered: {
+		//			treeModel.synchronize()
+		//			undoManager.setClean()
+		////			treeView.treeModel.refresh()
+		//		}
 	}
 
 	Action {
 		id: mountBackendAction
 
-//		text: qsTr("&Mount Backend ...")
-//		iconSource: "icons/mount.png"
-//		iconName: Helper.useIcon("list-add")
-//		tooltip: qsTr("Mount Backend")
-//		enabled: !toggleViewerAction.checked
-//		onTriggered: {
-//			wizardLoader.usedNames = guiBackend.mountPoints()
-//			wizardLoader.show()
-//		}
+		//		text: qsTr("&Mount Backend ...")
+		//		iconSource: "icons/mount.png"
+		//		iconName: Helper.useIcon("list-add")
+		//		tooltip: qsTr("Mount Backend")
+		//		enabled: !toggleViewerAction.checked
+		//		onTriggered: {
+		//			wizardLoader.usedNames = guiBackend.mountPoints()
+		//			wizardLoader.show()
+		//		}
 	}
 
 	Action {
 		id: unmountBackendAction
 
-//		text: qsTr("&Unmount Backend ...")
-//		iconSource: "icons/unmount.png"
-//		iconName: Helper.useIcon("list-remove")
-//		tooltip: qsTr("Unmount Backend")
-//		enabled: !toggleViewerAction.checked
-//		onTriggered: {
-//			unmountBackendWindow.mountedBackendsView.model = treeView.treeModel.mountedBackends()
-//			unmountBackendWindow.mountedBackendsView.currentIndex = -1
-//			unmountBackendWindow.show()
-//		}
+		//		text: qsTr("&Unmount Backend ...")
+		//		iconSource: "icons/unmount.png"
+		//		iconName: Helper.useIcon("list-remove")
+		//		tooltip: qsTr("Unmount Backend")
+		//		enabled: !toggleViewerAction.checked
+		//		onTriggered: {
+		//			unmountBackendWindow.mountedBackendsView.model = treeView.treeModel.mountedBackends()
+		//			unmountBackendWindow.mountedBackendsView.currentIndex = -1
+		//			unmountBackendWindow.show()
+		//		}
 	}
 
 	Action {
@@ -314,7 +314,7 @@ Item {
 
 		onTriggered: {
 			if(searchResultsView.activeFocus){
-	//			editKeyWindow.selectedNode = noLeavesProxyModel.mapSelectionToSource(
+				//			editKeyWindow.selectedNode = noLeavesProxyModel.mapSelectionToSource(
 			}
 			else if(tableView.activeFocus) {
 				editKeyWindow.selectedNode = onlyLeavesProxyModel.mapToSource(tableView.currentIndex)
@@ -331,50 +331,50 @@ Item {
 	Action {
 		id: cutAction
 
-//		iconSource: "icons/edit-cut.png"
-//		iconName: Helper.useIcon("edit-cut")
-//		text: qsTr("Cut")
-//		tooltip: qsTr("Cut")
-//		shortcut: StandardKey.Cut
-//		enabled: !(treeView.currentNode === null && keyAreaSelectedItem === null) && !toggleViewerAction.checked
+		//		iconSource: "icons/edit-cut.png"
+		//		iconName: Helper.useIcon("edit-cut")
+		//		text: qsTr("Cut")
+		//		tooltip: qsTr("Cut")
+		//		shortcut: StandardKey.Cut
+		//		enabled: !(treeView.currentNode === null && keyAreaSelectedItem === null) && !toggleViewerAction.checked
 
-//		onTriggered: {
-//			if(treeView.currentNode !== null && keyAreaSelectedItem === null)
-//				MFunctions.cutBranch()
-//			else if(treeView.currentNode !== null && keyAreaSelectedItem !== null)
-//				MFunctions.cutKey()
-//		}
+		//		onTriggered: {
+		//			if(treeView.currentNode !== null && keyAreaSelectedItem === null)
+		//				MFunctions.cutBranch()
+		//			else if(treeView.currentNode !== null && keyAreaSelectedItem !== null)
+		//				MFunctions.cutKey()
+		//		}
 	}
 
 	Action {
 		id: copyAction
 
-//		iconSource: "icons/edit-copy.png"
-//		iconName: Helper.useIcon("edit-copy")
-//		text: qsTr("Copy")
-//		tooltip: qsTr("Copy")
-//		shortcut: StandardKey.Copy
-//		enabled: !(treeView.currentNode === null && keyAreaSelectedItem === null) && !toggleViewerAction.checked
+		//		iconSource: "icons/edit-copy.png"
+		//		iconName: Helper.useIcon("edit-copy")
+		//		text: qsTr("Copy")
+		//		tooltip: qsTr("Copy")
+		//		shortcut: StandardKey.Copy
+		//		enabled: !(treeView.currentNode === null && keyAreaSelectedItem === null) && !toggleViewerAction.checked
 
-//		onTriggered: {
-//			if(treeView.currentNode !== null && keyAreaSelectedItem === null)
-//				MFunctions.copyBranch()
-//			else if(treeView.currentNode !== null && keyAreaSelectedItem !== null)
-//				MFunctions.copyKey()
-//		}
+		//		onTriggered: {
+		//			if(treeView.currentNode !== null && keyAreaSelectedItem === null)
+		//				MFunctions.copyBranch()
+		//			else if(treeView.currentNode !== null && keyAreaSelectedItem !== null)
+		//				MFunctions.copyKey()
+		//		}
 	}
 
 	Action {
 		id: pasteAction
 
-//		iconSource: "icons/edit-paste.png"
-//		iconName: Helper.useIcon("edit-paste")
-//		text: qsTr("Paste")
-//		tooltip: qsTr("Paste")
-//		shortcut: StandardKey.Paste
-//		enabled: undoManager.canPaste && !toggleViewerAction.checked
+		//		iconSource: "icons/edit-paste.png"
+		//		iconName: Helper.useIcon("edit-paste")
+		//		text: qsTr("Paste")
+		//		tooltip: qsTr("Paste")
+		//		shortcut: StandardKey.Paste
+		//		enabled: undoManager.canPaste && !toggleViewerAction.checked
 
-//		onTriggered: MFunctions.paste()
+		//		onTriggered: MFunctions.paste()
 	}
 
 	Action {

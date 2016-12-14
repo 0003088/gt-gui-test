@@ -738,6 +738,20 @@ QModelIndex TreeModel::pathToIndex(const Path &path){
 	return iter;
 }
 
+Key TreeModel::createNewKey (const QString & name, const QString & value, const QVariantMap metaData)
+{
+	Key key;
+	key.setName (name.toStdString ());
+	key.setString (value.toStdString ());
+
+	for (QVariantMap::const_iterator iter = metaData.begin (); iter != metaData.end (); iter++)
+	{
+		key.setMeta (iter.key ().toStdString (), iter.value ().toString ().toStdString ());
+	}
+
+	return key;
+}
+
 QHash<int, QByteArray> TreeModel::roleNames() const
 {
 	QHash<int, QByteArray> roles;
