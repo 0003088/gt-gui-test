@@ -18,6 +18,7 @@ void NoLeavesProxyModel::textFilterChanged(const QString &text)
 	QRegExp regex(text,Qt::CaseInsensitive);
 
 	setFilterRegExp(regex);
+	invalidateFilter();
 }
 
 bool NoLeavesProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -27,7 +28,7 @@ bool NoLeavesProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sou
 
 	QModelIndex index = sourceModel()->index(source_row, filterKeyColumn(), source_parent);
 
-       	if(index.isValid())
+	if(index.isValid())
 	{
 		bool accept = !(sourceModel()->data(index, TreeModel::ChildCountRole) == 0
 		&& !sourceModel()->data(index, TreeModel::SiblingHasChildrenRole).toBool()
@@ -35,12 +36,16 @@ bool NoLeavesProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sou
 		&& (sourceModel()->data(index, TreeModel::BaseNameRole).toString().contains(filterRegExp())
 		||	sourceModel()->data(index, TreeModel::ValueRole).toString().contains(filterRegExp()));
 
-	        if (sourceModel()->hasChildren(index)
-                {
-                    for (int i = 0; i < sourceModel()->rowCount(index); i++)
-                    {
-                        accept = accept || filterAcceptsRow(i,index);
-                    }
-                }
-        }
+		if (sourceModel()->hasChildren(index))
+		{
+			for (int i = 0; i < sourceModel()->rowCount(index); i++)
+			{
+				accept = accept || filterAcceptsRow(i,index);
+			}
+
+		}
+
+		return accept;
+	}
+	return true;
 }
