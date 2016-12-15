@@ -282,6 +282,19 @@ bool TreeItem::insertChildren(int index, QList<QSharedPointer<TreeItem> > items)
 	return true;
 }
 
+int TreeItem::getChildIndexByName (const QString & baseName)
+{
+	if (m_children)
+	{
+		for (int i = 0; i < m_children.count (); i++)
+		{
+			if (m_children.at (i)->baseName() == baseName) return i;
+		}
+	}
+
+	return -1;
+}
+
 void TreeItem::setIsDirty(bool value)
 {
 	m_isDirty = value;
@@ -362,13 +375,13 @@ void TreeItem::setValue()
 		m_value = QVariant::fromValue(QString::fromStdString(m_key.getBinary()));
 }
 
-void TreeItem::setKeyName(const QString &name)
+void TreeItem::setKeyName(const QString &baseName)
 {
 	if(m_key)
 	{
 		try
 		{
-			m_key.setName(name.toStdString());
+			m_key.setName(baseName.toStdString());
 		}
 		catch(KeyInvalidName ex)
 		{
@@ -425,7 +438,7 @@ bool TreeItem::siblingHasChildren() const
 {
 	foreach (TreeItemPtr item, parent()->children())
 	{
-		if(item->name() != name() && item->childCount() > 0)
+		if(item->name() != baseName() && item->childCount() > 0)
 			return true;
 	}
 

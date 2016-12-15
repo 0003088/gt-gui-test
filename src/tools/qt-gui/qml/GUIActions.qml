@@ -134,7 +134,7 @@ Item {
 			enabled: undoManager.canUndo
 			onTriggered: {
 				undoManager.undo()
-//				treeViewSelection.updateRoot()
+				//				treeViewSelection.updateRoot()
 			}
 			//			if(undoManager.undoText === "deleteBranch"){
 			//				undoManager.undo()
@@ -206,7 +206,7 @@ Item {
 		enabled: undoManager.canRedo
 		onTriggered: {
 			undoManager.redo()
-//			treeViewSelection.updateRoot()
+			//			treeViewSelection.updateRoot()
 		}
 		//			if(undoManager.redoText === "deleteBranch"){
 		//				undoManager.redo()
@@ -262,17 +262,17 @@ Item {
 	Action {
 		id: synchronizeAction
 
-		//		text: qsTr("Synchronize")
-		//		iconSource: "icons/view-refresh.png"
-		//		iconName: Helper.useIcon("view-refresh")
-		//		tooltip: qsTr("Synchronize")
-		//		shortcut: StandardKey.Refresh
-		//		enabled: !toggleViewerAction.checked
-		//		onTriggered: {
-		//			treeModel.synchronize()
-		//			undoManager.setClean()
-		////			treeView.treeModel.refresh()
-		//		}
+		text: qsTr("Synchronize")
+		iconSource: "icons/view-refresh.png"
+		iconName: Helper.useIcon("view-refresh")
+		tooltip: qsTr("Synchronize")
+		shortcut: StandardKey.Refresh
+		enabled: !toggleViewerAction.checked
+		onTriggered: {
+			treeModel.synchronize()
+			undoManager.setClean()
+			//			treeView.treeModel.refresh()
+		}
 	}
 
 	Action {

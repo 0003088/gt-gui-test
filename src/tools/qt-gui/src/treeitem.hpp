@@ -23,10 +23,10 @@ public:
 	TreeItem() {}
 	~TreeItem();
 
-	QString								baseName() const;
-	QString								name() const;
-	QString								toString() const;
-	QString								getCurrentArrayNo () const;
+	QString							baseName() const;
+	QString							name() const;
+	QString							toString() const;
+	QString							getCurrentArrayNo () const;
 
 	QVariant							value() const;
 
@@ -36,9 +36,10 @@ public:
 	QSharedPointer<TreeItem>			child(int row) const;
 	QSharedPointer<TreeItem>			getChildByName(QString &name) const;
 
-	int									childCount() const;
-	int									columnCount() const;
-	int									row() const;
+	int								childCount() const;
+	int								columnCount() const;
+	int								row() const;
+	int 								getChildIndexByName(const QString &baseName);
 
 	void								setBaseName(const QString &baseName);
 	void								setName(const QString &name);
@@ -60,27 +61,27 @@ public:
 	bool								insertChild(int index, QSharedPointer<TreeItem> item);
 	bool								insertChildren(int index, QList<QSharedPointer<TreeItem> > items);
 	bool								removeChildren(int row, int count);
-	bool 								siblingHasChildren() const;
+	bool 							siblingHasChildren() const;
 
 	QList<QSharedPointer<TreeItem> >	children() const;
 
-	MetaModel							*metaData() const;
+	MetaModel						*metaData() const;
 
 private:
-	QString								m_baseName;
-	QString								m_name;
+	QString							m_baseName;
+	QString							m_name;
 	QVariant							m_value;
 	kdb::Key							m_key;
 
 	QList<QSharedPointer<TreeItem> >	m_children;
 	QSharedPointer<TreeItem>			m_parent;
-	MetaModel*							m_metaData;
+	MetaModel*						m_metaData;
 	bool								m_isDirty;
 
 	void								populateMetaModel();
 	void								setValue();
 	void								setKeyName(const QString &name);
-	int									getRowByName() const;
+	int								getRowByName() const;
 };
 
 Q_DECLARE_METATYPE(TreeItem)

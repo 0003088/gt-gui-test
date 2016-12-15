@@ -282,14 +282,14 @@ void TreeModel::sink(TreeItemPtr item, QStringList keys, const Key& key)
 
 	QString baseName =  keys.takeFirst();
 
-	if (item->hasChild(baseName))// && !item->getChildByName(baseName)->isDirty())
+	if (item->hasChild(baseName) && !item->getChildByName(baseName)->isDirty())
 	{
 		sink(item->getChildByName(baseName), keys, key);
 	}
 	else
 	{
-		//		if(item->hasChild(name))
-		//			item->children()->removeRow(item->getChildIndexByName(name));//TODO
+		if(item->hasChild(baseName))
+			item->removeChildren(item->getChildIndexByName(baseName),1);
 
 		TreeItemPtr newNode;
 
@@ -769,7 +769,7 @@ QHash<int, QByteArray> TreeModel::roleNames() const
 	roles[ItemRole] = "item";
 	roles[HierarchyRole] = "hierarchy";
 	roles[SiblingHasChildrenRole] = "siblingHasChildren";
-//	qDebug() << "BaseNameRole" << BaseNameRole;
+	//	qDebug() << "BaseNameRole" << BaseNameRole;
 	return roles;
 }
 
