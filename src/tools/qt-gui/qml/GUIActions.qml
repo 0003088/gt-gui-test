@@ -134,7 +134,7 @@ Item {
 			enabled: undoManager.canUndo
 			onTriggered: {
 				undoManager.undo()
-				treeViewSelection.updateRoot()
+//				treeViewSelection.updateRoot()
 			}
 			//			if(undoManager.undoText === "deleteBranch"){
 			//				undoManager.undo()
@@ -206,7 +206,7 @@ Item {
 		enabled: undoManager.canRedo
 		onTriggered: {
 			undoManager.redo()
-			treeViewSelection.updateRoot()
+//			treeViewSelection.updateRoot()
 		}
 		//			if(undoManager.redoText === "deleteBranch"){
 		//				undoManager.redo()

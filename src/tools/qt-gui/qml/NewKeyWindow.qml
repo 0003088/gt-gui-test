@@ -29,7 +29,7 @@ KeyWindow {
 			visible = false
 
 			if (undoManager.undoText === "newBranch"){
-				keyAreaView.selection.clear()
+//				keyView.selection.clear()
 //				treeView.treeModel.refresh()
 //				keyAreaSelectedItem = null
 			}

@@ -42,6 +42,7 @@ private:
 //	QString		m_value;
 //	QVariantMap	m_metaData;
 	Path		m_path;
+	int			m_row;
 
 	/**
 	 * @brief cutListAtIndex Helper method that cuts a QStringList at an index and returns the rest of the list.
