@@ -284,12 +284,9 @@ bool TreeItem::insertChildren(int index, QList<QSharedPointer<TreeItem> > items)
 
 int TreeItem::getChildIndexByName (const QString & baseName)
 {
-	if (m_children)
+	for (int i = 0; i < m_children.count (); i++)
 	{
-		for (int i = 0; i < m_children.count (); i++)
-		{
-			if (m_children.at (i)->baseName() == baseName) return i;
-		}
+		if (m_children.at (i)->baseName() == baseName) return i;
 	}
 
 	return -1;
@@ -342,7 +339,7 @@ void TreeItem::refreshArrayNumbers()
 
 void TreeItem::accept (Visitor & visitor)
 {
-//	qDebug() << m_name << " accepted KSV ";
+	//	qDebug() << m_name << " accepted KSV ";
 	visitor.visit (*this);
 
 	if (!m_children.empty())
